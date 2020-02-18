@@ -1,6 +1,8 @@
 
 const mariadb = require('mariadb');
-require('dotenv').config({ path: '.env.test' });
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config({ path: '.env.development' });
+}
 const pool = mariadb.createPool({
     host: 'yaumjai.com',
     user: process.env.MARIADB_USERNAME,
