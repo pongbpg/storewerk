@@ -56,7 +56,7 @@ export class OutStockPage extends React.Component {
             orderDetail: [],
             includeVat: false
         }
-        this.props.startGetInventories(props.auth.account.accountId)
+        this.props.startGetInventories(props.auth.account.accountId, moment().format('YYYY-MM-DD'))
         this.getOrderNoLatest = getOrderNoLatest;
     }
     componentWillReceiveProps(nextProps) {
@@ -254,7 +254,10 @@ export class OutStockPage extends React.Component {
                                         dateFormat="DD/MM/YYYY"
                                         placeholderText="เลือกวันที่"
                                         selected={this.state.order.orderDate}
-                                        onChange={(orderDate) => this.setState({ order: { ...this.state.order, orderDate } })}
+                                        onChange={(orderDate) => this.setState({
+                                            order: { ...this.state.order, orderDate }
+                                        }
+                                            , () => this.props.startGetInventories(this.state.auth.account.accountId, moment(orderDate).format('YYYY-MM-DD')))}
                                     />
                                 </div>
                             </div>
@@ -723,7 +726,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    startGetInventories: (accountId) => dispatch(startGetInventories(accountId)),
+    startGetInventories: (accountId, orderDate) => dispatch(startGetInventories(accountId, orderDate)),
     startAddOrder: (order) => dispatch(startAddOrder(order))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(OutStockPage);

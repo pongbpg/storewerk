@@ -1,9 +1,10 @@
 import axios from 'axios'
 
-export const getInventoriesByAccountId = (accountId) => {
+export const getInventoriesByAccountId = (accountId,orderDate) => {
     return axios.get('/api/inventories/account', {
         params: {
-            accountId
+            accountId,
+            orderDate
         }
     })
 }

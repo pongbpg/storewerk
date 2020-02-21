@@ -40,7 +40,7 @@ export class Header extends React.Component {
       <nav className="navbar is-dark is-fixed-top has-shadow">
         <div className="container">
           <div className="navbar-brand">
-            <Link to="/home" className="navbar-item title">StoreWerk!</Link>
+            <Link to="/home" className="navbar-item title">StoreWerk.</Link>
           </div>
           <div id="navbarMenu" className={`navbar-menu ${this.state.isBurger && 'is-active'}`}>
 

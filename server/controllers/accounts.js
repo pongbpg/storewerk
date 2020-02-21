@@ -23,7 +23,7 @@ exports.getByUser = (req, res) => {
 }
 exports.createAccount = (req, res) => {
     // console.log('before query', req.body.accountId)
-    const sql = `select * from accounts where accountId = ?`
+    // const sql = `select * from accounts where accountId = ?`
     // req._sql.query(sql, [req.body.accountId])
     //     .then(rows => {
     //         if (rows.length > 0) {

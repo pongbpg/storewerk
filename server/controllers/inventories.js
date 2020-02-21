@@ -11,8 +11,8 @@ exports.getByWarehouseId = (req, res) => {
         })
 }
 exports.getByAccountId = (req, res) => {
-    const sql = `call getInventoryByAccId(?)`
-    req._sql.query(sql, [req.query.accountId])
+    const sql = `call getInventoryByAccId(?,?)`
+    req._sql.query(sql, [req.query.accountId, req.query.orderDate])
         .then(rows => {
             res.json(rows)
         })

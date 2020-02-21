@@ -20,9 +20,9 @@ export class HomePage extends React.Component {
 
   render() {
     return (
-      <div className="hero is-warning">
+      <div className="hero">
         <div className="hero-body">
-          Home Page
+          Coming Soon!
         </div>
       </div>
     );

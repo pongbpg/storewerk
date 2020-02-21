@@ -5,18 +5,19 @@ import { startNewAccount } from '../../actions/accounts';
 import { Link } from 'react-router-dom';
 import { history } from '../../routers/AppRouter';
 import taxIdValidator from '../../selectors/taxIdValidator';
+import { FaFileImage } from 'react-icons/fa'
 import _ from 'underscore';
-import ImageUploader from 'react-images-upload';
 export class AddPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             auth: props.auth,
-            account: { accountName: '', accountTel: '', accountFax: '', accountId: '', accountAddr: '', accountLogo: [] },
+            account: { accountName: '', accountTel: '', accountFax: '', accountId: '', accountAddr: '', accountLogo: null },
+            imageFile: null,
+            imagePreviewUrl: null,
             errors: { accountId: '', msg: '' },
             loading: ''
         }
-        this.onDrop = this.onDrop.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         // this.taxIdValidator = this.taxIdValidator.bind(this);
     }
@@ -25,14 +26,25 @@ export class AddPage extends React.Component {
             this.setState({ auth: nextProps.auth });
         }
     }
-    onDrop(picture) {
+    fileChangedHandler = event => {
+        const file = event.target.files;
         this.setState({
-            account: {
-                ...this.state.accoumt,
-                accountLogo: this.state.account.accountLogo.concat(picture)
-            }
-        });
+            imageFile: file.length > 0 ? event.target.files[0] : null
+        })
+
+        let reader = new FileReader();
+
+        reader.onloadend = () => {
+            this.setState({
+                imagePreviewUrl: file.length > 0 ? reader.result : null
+            });
+        }
+        if (file.length > 0) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
     }
+
+
     onInputChange = (e) => {
         const key = e.target.name;
         const value = e.target.value;//.toUpperCase();
@@ -47,7 +59,11 @@ export class AddPage extends React.Component {
     onSubmit = (e) => {
         e.preventDefault();
         this.setState({ loading: 'is-loading' })
-        this.props.startNewAccount({ ...this.state.account, creator: this.state.auth.email })
+        this.props.startNewAccount({
+            ...this.state.account,
+            accountLogo: this.state.imagePreviewUrl,
+            creator: this.state.auth.email
+        })
             .then(res => {
                 // console.log(res)
                 this.setState({
@@ -60,6 +76,14 @@ export class AddPage extends React.Component {
                     history.push('/accounts')
                 }
 
+            })
+            .catch(err => {
+                this.setState({
+                    loading: '', errors: {
+                        ...this.state.errors,
+                        msg: res.msg
+                    }
+                })
             })
     }
 
@@ -190,15 +214,28 @@ export class AddPage extends React.Component {
                             <label className="label">โลโก้</label>
                         </div>
                         <div className="field-body">
-                            <div className="field">
+                            <div className="field  is-grouped">
                                 <div className="control">
-                                    <ImageUploader
-                                        withIcon={true}
-                                        buttonText='Choose images'
-                                        onChange={this.onDrop}
-                                        imgExtension={['.jpg', '.png']}
-                                        maxFileSize={5242880}
-                                    />
+                                    <figure className="image is-128x128">
+                                        <img src={this.state.imageFile ? this.state.imagePreviewUrl : this.state.account.accountLogo} />
+                                    </figure>
+                                </div>
+                                <div className="control">
+                                    <div className="file has-name is-right">
+                                        <label className="file-label">
+                                            <input type="file" className="file-input" onChange={this.fileChangedHandler} />
+                                            <span className="file-cta">
+                                                <span className="file-icon">
+                                                    <FaFileImage />
+                                                </span>
+                                                <span className="file-label">เลือกรูปภาพ</span>
+                                            </span>
+                                            {
+                                                this.state.imageFile &&
+                                                <span className="file-name">{this.state.imageFile.name}</span>
+                                            }
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

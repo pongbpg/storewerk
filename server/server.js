@@ -10,7 +10,7 @@ const routers = require('./routes/index');
 moment.locale('th');
 
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb', extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //mariadb
@@ -23,4 +23,4 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'))
 });
 
-app.listen(port,  () => console.log('Server is up port:' + port));
+app.listen(port, () => console.log('Server is up port:' + port));

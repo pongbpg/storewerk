@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { startGetInventories } from '../../actions/inventories'
 import ReactTable from 'react-table-v6'
 import NumberFormat from 'react-number-format'
+import DatePicker from 'react-datepicker';
 import 'react-table-v6/react-table.css'
 import _ from 'underscore';
 import moment from 'moment';
@@ -13,6 +14,7 @@ export class ListPage extends React.Component {
         this.state = {
             auth: props.auth,
             search: '',
+            orderDate: moment(),
             inventories: props.inventories,
             warehouses: _.chain(props.inventories)
                 .groupBy('warehouseName')
@@ -26,7 +28,7 @@ export class ListPage extends React.Component {
             alert('คุณยังไม่ได้เลือกบัญชี!!')
             history.push('/accounts')
         } else {
-            this.props.startGetInventories(props.auth.account.accountId);
+            this.props.startGetInventories(props.auth.account.accountId, moment().format('YYYY-MM-DD'));
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -136,6 +138,21 @@ export class ListPage extends React.Component {
 
         return (
             <div className="box" >
+                <div className="field">
+                    <label className="label">วันที่</label>
+                    <div className="control">
+                        <DatePicker
+                            className="input has-text-centered"
+                            dateFormat="DD/MM/YYYY"
+                            placeholderText="เลือกวันที่"
+                            selected={this.state.orderDate}
+                            onChange={(orderDate) => this.setState({
+                                orderDate
+                            }, () => this.props.startGetInventories(this.state.auth.account.accountId, moment(orderDate).format('YYYY-MM-DD')))}
+                        />
+                    </div>
+                </div>
+
                 <ReactTable className="table -highlight"
                     filterable
                     defaultFilterMethod={(filter, row) =>
@@ -156,6 +173,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    startGetInventories: (accountId) => dispatch(startGetInventories(accountId))
+    startGetInventories: (accountId, orderDate) => dispatch(startGetInventories(accountId, orderDate))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ListPage);

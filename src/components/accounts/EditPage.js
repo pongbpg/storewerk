@@ -4,13 +4,16 @@ import NumberFormat from 'react-number-format';
 import { startGetAccount, startUpdateAccount, startUpdateStatusAccount } from '../../actions/accounts';
 import { Link } from 'react-router-dom';
 import _ from 'underscore';
+import { FaFileImage } from 'react-icons/fa'
 import { history } from '../../routers/AppRouter';
 export class EditPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             auth: props.auth,
-            account: props.accounts.find(f => f.accountId == props.match.params.id) || { accountId: '', accountName: '', accountTel: '', accountAddr: '', statusRemark: '' },
+            account: props.accounts.find(f => f.accountId == props.match.params.id) || { accountId: '', accountName: '', accountTel: '', accountAddr: '', statusRemark: '', accountLogo: null },
+            imageFile: null,
+            imagePreviewUrl: null,
             loading: '',
             isModal: false
         }
@@ -24,6 +27,23 @@ export class EditPage extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.auth != this.state.auth) {
             this.setState({ auth: nextProps.auth });
+        }
+    }
+    fileChangedHandler = event => {
+        const file = event.target.files;
+        this.setState({
+            imageFile: file.length > 0 ? event.target.files[0] : null
+        })
+
+        let reader = new FileReader();
+
+        reader.onloadend = () => {
+            this.setState({
+                imagePreviewUrl: file.length > 0 ? reader.result : null
+            });
+        }
+        if (file.length > 0) {
+            reader.readAsDataURL(event.target.files[0]);
         }
     }
 
@@ -45,6 +65,7 @@ export class EditPage extends React.Component {
         this.setState({ loading: 'is-loading' })
         this.props.startUpdateAccount({
             ..._.pick(this.state.account, 'accountId', 'accountName', 'accountTel', 'accountFax', 'accountAddr'),
+            accountLogo: this.state.imagePreviewUrl,
             updater: this.state.auth.email,
             isStatus: 'WAITING'
         })
@@ -54,7 +75,14 @@ export class EditPage extends React.Component {
                     history.push('/accounts')
                 }
             })
-
+            .catch(err => {
+                this.setState({
+                    loading: '', errors: {
+                        ...this.state.errors,
+                        msg: res.msg
+                    }
+                })
+            })
     }
 
     onApproveClick = (isStatus, e) => {
@@ -180,6 +208,37 @@ export class EditPage extends React.Component {
                                         disabled={this.state.loading != ''}
                                         value={this.state.account.accountAddr} onChange={this.onInputChange} required
                                     ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="field is-horizontal">
+                        <div className="field-label is-normal">
+                            <label className="label">โลโก้</label>
+                        </div>
+                        <div className="field-body">
+                            <div className="field  is-grouped">
+                                <div className="control">
+                                    <figure className="image is-128x128">
+                                        <img src={this.state.imageFile ? this.state.imagePreviewUrl : this.state.account.accountLogo} />
+                                    </figure>
+                                </div>
+                                <div className="control">
+                                    <div className="file has-name is-right">
+                                        <label className="file-label">
+                                            <input type="file" className="file-input" onChange={this.fileChangedHandler} />
+                                            <span className="file-cta">
+                                                <span className="file-icon">
+                                                    <FaFileImage />
+                                                </span>
+                                                <span className="file-label">เลือกรูปภาพ</span>
+                                            </span>
+                                            {
+                                                this.state.imageFile &&
+                                                <span className="file-name">{this.state.imageFile.name}</span>
+                                            }
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
