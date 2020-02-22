@@ -1,5 +1,5 @@
 // import db from '../firebase/firebase';
-import { getOrdersByAccountId, getOrdersById, createOrder, updateOrder } from '../api/orders';
+import { getOrdersByAccountId, getOrdersById, createOrder, updateOrder, deleteOrder } from '../api/orders';
 import _ from 'underscore';
 import moment from 'moment';
 moment.locale('th');
@@ -57,7 +57,26 @@ export const startUpdateOrder = (order) => {
                     }
                 }
             })
+    }
+}
 
+export const startDeleteOrder = (orderId) => {
+    return dispatch => {
+        return deleteOrder(orderId)
+            .then(result => {
+                if (result.data.deleted) {
+                    dispatch(deleteOrders(orderId))
+                    return {
+                        error: false,
+                        msg: 'Your order has been successfully deleted.'
+                    }
+                } else {
+                    return {
+                        error: true,
+                        msg: result.data.msg
+                    }
+                }
+            })
     }
 }
 
@@ -68,6 +87,10 @@ export const setOrders = (orders) => ({
 export const updateOrders = (order) => ({
     type: 'UPDATE_ORDERS',
     order
+});
+export const deleteOrders = (orderId) => ({
+    type: 'DELETE_ORDERS',
+    orderId
 });
 export const addOrders = (order) => ({
     type: 'ADD_ORDERS',

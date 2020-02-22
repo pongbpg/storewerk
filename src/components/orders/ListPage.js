@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { history } from '../../routers/AppRouter';
-import { startGetOrders } from '../../actions/orders'
+import { startGetOrders, startDeleteOrder } from '../../actions/orders'
 import ReactTable from 'react-table-v6'
 import { FaSearch } from 'react-icons/fa';
 import NumberFormat from 'react-number-format'
@@ -32,7 +32,11 @@ export class ListPage extends React.Component {
             this.setState({ orders: nextProps.orders });
         }
     }
+    onDeleteClick = (orderId) => {
+        // console.log(orderId)
+        this.props.startDeleteOrder(orderId)
 
+    }
     render() {
         const columns = [
             {
@@ -126,9 +130,16 @@ export class ListPage extends React.Component {
                     return (
                         <div className="field is-grouped is-grouped-centered">
                             <div className="control">
-                                <Link className="button is-small" to={`/orders/edit/${props.original.id}`}>แก้ไข</Link>
+                                {/* {moment(props.original.created).isSame(new Date(), "day") &&
+                                    <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
+                                } */}
+                                <a className="button"
+                                    href={`http://rpt.storewerk.me/invoice?orderId=${props.original.orderId}`} target="_blank">
+                                    Invoice
+                                </a>
+                                {/* <Link className="button is-small" to={`/orders/out/stock/edit/${props.original.orderId}`}>แก้ไข</Link> */}
                             </div>
-                        </div>
+                        </div >
                     )
                 }
             },
@@ -170,6 +181,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    startGetOrders: (accountId) => dispatch(startGetOrders(accountId))
+    startGetOrders: (accountId) => dispatch(startGetOrders(accountId)),
+    startDeleteOrder: (orderId) => dispatch(startDeleteOrder(orderId))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ListPage);

@@ -7,6 +7,7 @@ import NumberFormat from 'react-number-format';
 import { startGetInventories } from '../../actions/inventories';
 import { FaSearch } from 'react-icons/fa'
 import { FiPercent } from 'react-icons/fi'
+import { TiRefresh } from 'react-icons/ti'
 import { getMembersByTel } from '../../api/members'
 import { getOrderNoLatest } from '../../api/orders';
 import { startAddOrder } from '../../actions/orders';
@@ -77,6 +78,7 @@ export class OutStockPage extends React.Component {
             });
         }
     }
+
     onTelBlur = (e) => {
         // const name = e.target.name;
         const customerTel = e.target.value;
@@ -289,11 +291,6 @@ export class OutStockPage extends React.Component {
                                 <p className="card-header-title">
                                     ข้อมูลผู้ขาย
                                 </p>
-                                {/* <a href="#" className="card-header-icon" aria-label="more options">
-                                    <span className="icon">
-                                        <i className="fa fa-angle-down" aria-hidden="true"></i>
-                                    </span>
-                                </a> */}
                             </header>
                             <div className="card-content">
                                 <div className="content">
@@ -379,6 +376,16 @@ export class OutStockPage extends React.Component {
                                         <p className="card-header-title">
                                             คลังสินค้า
                                 </p>
+
+                                        <a href="#" className="card-header-icon" aria-label="more options"
+                                            onClick={() => this.props.startGetInventories(
+                                                this.state.auth.account.accountId,
+                                                moment(this.state.order.orderDate).format('YYYY-MM-DD'))
+                                            }>
+                                            <span className="icon">
+                                                <TiRefresh aria-hidden="true" />
+                                            </span>
+                                        </a>
                                     </header>
                                     <div className="card-content">
                                         <div className="content">

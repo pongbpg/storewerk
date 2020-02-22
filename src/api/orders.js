@@ -16,6 +16,15 @@ export const getOrdersById = (orderId, accountId) => {
         }
     })
 }
+export const getOrderDetailById = (orderId, accountId) => {
+    // console.log('api', orderId, accountId)
+    return axios.get('/api/orders/detail', {
+        params: {
+            orderId,
+            accountId
+        }
+    })
+}
 export const getOrderNoLatest = (accountId, year) => {
     // console.log('api', orderId, accountId)
     return axios.get('/api/orders/latest/no', {
@@ -42,5 +51,5 @@ export const updateOrder = (order) => {
 }
 
 export const deleteOrder = (orderId) => {
-    return axios.delete(`/orders/${orderId}`)
+    return axios.delete(`/api/orders/${orderId}`)
 }

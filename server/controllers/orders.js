@@ -10,6 +10,16 @@ exports.getById = (req, res) => {
             res.json(rows)
         })
 }
+exports.getDetailById = (req, res) => {
+    const sql = `select *
+    from orders_detail where orderId=? and accountId=?
+    `
+    req._sql.query(sql, [req.query.orderId, req.query.accountId])
+        .then(rows => {
+            console.log(rows)
+            res.json(rows)
+        })
+}
 exports.getByAccountId = (req, res) => {
     const sql = `select *
     from orders 
@@ -26,7 +36,7 @@ exports.getOrderNoLatest = (req, res) => {
             res.json(row)
         })
 }
-exports.create = (req, res) => {
+exports.created = (req, res) => {
     const keys = Object.keys(req.body.order);
     const sql = `insert into orders(${keys.join(',')}) values ?`;
 
@@ -60,7 +70,7 @@ exports.create = (req, res) => {
             })
         })
 }
-exports.update = (req, res) => {
+exports.updated = (req, res) => {
     const keys = Object.keys(_.omit(req.body, 'orderId', 'accountId'));
     let val = [];
     const sql = `update orders
@@ -84,6 +94,29 @@ exports.update = (req, res) => {
             console.log(err);
             res.json({
                 updated: false,
+                msg: err.code
+            })
+        })
+}
+exports.deleted = (req, res) => {
+    // res.json({ deleted: true, orderId: req.params.orderId })
+    const sql = `DELETE orders,orders_detail FROM orders
+        INNER JOIN
+        orders_detail ON orders_detail.orderId = orders.orderId
+    WHERE
+    orders.orderId = ?;`
+    req._sql.query(sql, [req.params.orderId])
+        .then(row => {
+            res.json({
+                deleted: row.affectedRows > 0,
+                msg: ''
+            })
+        })
+        .catch(err => {
+            //handle error
+            console.log(err);
+            res.json({
+                deleted: false,
                 msg: err.code
             })
         })
