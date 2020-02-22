@@ -25,12 +25,12 @@ export const getOrderDetailById = (orderId, accountId) => {
         }
     })
 }
-export const getOrderNoLatest = (accountId, year) => {
+export const getOrderNoLatest = (accountId, orderDate) => {
     // console.log('api', orderId, accountId)
     return axios.get('/api/orders/latest/no', {
         params: {
             accountId,
-            year
+            orderDate
         }
     })
 }

@@ -130,10 +130,10 @@ export class ListPage extends React.Component {
                     return (
                         <div className="field is-grouped is-grouped-centered">
                             <div className="control">
-                                {/* {moment(props.original.created).isSame(new Date(), "day") &&
+                                {moment(props.original.created).isSame(new Date(), "day") &&
                                     <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
-                                } */}
-                                <a className="button"
+                                }
+                                <a className="button is-small"
                                     href={`http://rpt.storewerk.me/invoice?orderId=${props.original.orderId}`} target="_blank">
                                     Invoice
                                 </a>

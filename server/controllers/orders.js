@@ -31,7 +31,7 @@ exports.getByAccountId = (req, res) => {
         })
 }
 exports.getOrderNoLatest = (req, res) => {
-    req._sql.query(`select LPAD(IFNULL(getOrderNo(?,?),1),4,0) as orderNo`, [req.query.accountId, req.query.year])
+    req._sql.query(`select LPAD(IFNULL(getOrderNo(?,?),1),4,0) as orderNo`, [req.query.accountId, req.query.orderDate])
         .then(row => {
             res.json(row)
         })

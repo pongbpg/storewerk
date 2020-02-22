@@ -127,7 +127,7 @@ export class OutStockPage extends React.Component {
         }, this.autoCalculator);
     };
     onGetOrderNo = () => {
-        this.getOrderNoLatest(this.state.auth.account.accountId, moment().format('YYYY'))
+        this.getOrderNoLatest(this.state.auth.account.accountId, moment(this.state.order.orderDate).format('YYYY-MM-DD'))
             .then(orderNo => {
                 this.setState({
                     order: {
