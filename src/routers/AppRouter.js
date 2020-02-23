@@ -103,13 +103,13 @@ class MembersRoute extends React.Component {
     const path = this.props.match.path;
     return (<div>
       <PublicRoute path={path}
-        breadcrumbs={[{ link: path, name: 'ผู้ติดต่อ' }, { link: '', name: 'รายการ' }]}
+        breadcrumbs={[{ link: path, name: 'สมาชิก' }, { link: '', name: 'รายการ' }]}
         component={MembersList} exact={true} />
       <PublicRoute path={path + '/add'}
-        breadcrumbs={[{ link: path, name: 'ผู้ติดต่อ' }, { link: '/add', name: 'เพิ่ม' }]}
+        breadcrumbs={[{ link: path, name: 'สมาชิก' }, { link: '/add', name: 'เพิ่ม' }]}
         component={MembersAdd} exact={true} />
       <PublicRoute path={path + '/edit/:code'}
-        breadcrumbs={[{ link: path, name: 'ผู้ติดต่อ' }, { link: '/edit', name: 'แก้ไข' }]}
+        breadcrumbs={[{ link: path, name: 'สมาชิก' }, { link: '/edit', name: 'แก้ไข' }]}
         component={MembersEdit} exact={true} />
     </div>
     )

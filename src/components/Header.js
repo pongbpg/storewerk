@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { startLogout } from '../actions/auth';
 import { MdExitToApp, MdAccountBox, MdPayment, MdSettings } from 'react-icons/md';
 import { TiContacts } from 'react-icons/ti'
-import { FaStore, FaList, FaSearch, FaClipboardList, FaWarehouse, FaLayerGroup } from 'react-icons/fa';
+import { FaStore, FaList, FaSearch, FaClipboardList, FaWarehouse, FaLayerGroup, FaUserCog } from 'react-icons/fa';
 export class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -40,7 +40,7 @@ export class Header extends React.Component {
       <nav className="navbar is-dark is-fixed-top has-shadow">
         <div className="container">
           <div className="navbar-brand">
-            <Link to="/home" className="navbar-item title">StoreWerk.</Link>
+            <Link to="/home" className="navbar-item title">StoreWerk</Link>
           </div>
           <div id="navbarMenu" className={`navbar-menu ${this.state.isBurger && 'is-active'}`}>
 
@@ -68,8 +68,9 @@ export class Header extends React.Component {
                     <Link className="navbar-item" to="/products"><span className="icon"><FaList /></span>สินค้า</Link>
                     <Link className="navbar-item" to="/products/categories"><span className="icon"><FaLayerGroup /></span>ประเภท</Link>
                     <Link className="navbar-item" to="/warehouses"><span className="icon"><FaWarehouse /></span>คลัง</Link>
-                    <Link className="navbar-item" to="/members"><span className="icon"><TiContacts /></span>ผู้ติดต่อ</Link>
+                    <Link className="navbar-item" to="/members"><span className="icon"><TiContacts /></span>สมาชิก</Link>
                     <Link className="navbar-item" to="/payments"><span className="icon"><MdPayment /></span>ชำระเงิน</Link>
+                    <Link className="navbar-item" to="/users"><span className="icon"><FaUserCog /></span>จัดการสิทธิ์</Link>
                   </div>
                 </div>
               </div>

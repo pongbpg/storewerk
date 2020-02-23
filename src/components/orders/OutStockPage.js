@@ -114,7 +114,7 @@ export class OutStockPage extends React.Component {
         }
     }
     onSelectProductChange = orderDetail => {
-        this.setState({ orderDetail });
+        this.setState({ orderDetail }, this.autoCalculator);
     };
     onSelectWarehouseChange = (warehouse) => {
         this.setState({
