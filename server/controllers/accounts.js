@@ -11,7 +11,8 @@ exports.getById = (req, res) => {
         })
 }
 exports.getByUser = (req, res) => {
-    const sql = `select a.* from accounts a
+    const sql = `select a.*,b.roleId
+    from accounts a
     left join users b on a.accountId = b.accountId
     where b.userId = ?
     order by a.registerDate
@@ -44,7 +45,8 @@ exports.createAccount = (req, res) => {
         .then(rows2 => {
             // console.log('inserted', rows2)
             if (rows2.affectedRows == 1) {
-                req._sql.query(`insert into users (accountId,userId) values(?,?)`, [req.body.accountId, req.body.creator])
+                req._sql.query(`insert into users (accountId,userId,creator,roleId) values(?,?,?,?)`,
+                    [req.body.accountId, req.body.creator, req.body.creator, 'ADMIN'])
             }
             res.json({
                 inserted: rows2.affectedRows == 1,

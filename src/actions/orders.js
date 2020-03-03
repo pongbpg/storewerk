@@ -29,9 +29,9 @@ export const startAddOrder = (order) => {
     }
 }
 
-export const startGetOrders = (accountId) => {
+export const startGetOrders = (accountId, userId) => {
     return dispatch => {
-        return getOrdersByAccountId(accountId)
+        return getOrdersByAccountId(accountId, userId)
             .then(row => {
                 // console.log('action get', row.data)
                 dispatch(setOrders(row.data))

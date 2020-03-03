@@ -7,6 +7,8 @@ const members = require('./members');
 const payments = require('./payments');
 const orders = require('./orders');
 const inventories = require('./inventories');
+const users = require('./users');
+const dashboard = require('./dashboard');
 
 router.use('/accounts', accounts)
 router.use('/categories', categories)
@@ -16,6 +18,8 @@ router.use('/members', members)
 router.use('/payments', payments)
 router.use('/orders', orders)
 router.use('/inventories', inventories)
+router.use('/users', users)
+router.use('/dashboard', dashboard)
 
 
 module.exports = router

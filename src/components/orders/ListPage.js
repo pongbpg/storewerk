@@ -21,7 +21,7 @@ export class ListPage extends React.Component {
             alert('คุณยังไม่ได้เลือกบัญชี!!')
             history.push('/accounts')
         } else {
-            this.props.startGetOrders(props.auth.account.accountId);
+            this.props.startGetOrders(props.auth.account.accountId, props.auth.email);
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -63,7 +63,7 @@ export class ListPage extends React.Component {
             {
                 Header: 'ชื่อ',
                 headerClassName: 'has-text-left',
-                maxWidth: 500,
+                maxWidth: 400,
                 Cell: (props, value) => {
                     if (props.original.orderTypeId == 'IN')
                         return props.original.supplierName
@@ -128,14 +128,14 @@ export class ListPage extends React.Component {
                 Cell: props => {
                     // console.log(props.original.id, '=', this.state.auth.account, props.original.id == this.state.auth.account)
                     return (
-                        <div className="field is-grouped is-grouped-centered">
+                        <div className="field is-grouped-centered">
                             <div className="control">
-                                {moment(props.original.created).isSame(new Date(), "day") &&
+                                {props.original.isStatus == 'SALE' &&
                                     <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
                                 }
                                 <a className="button is-small"
                                     href={`http://rpt.storewerk.me/invoice?orderId=${props.original.orderId}`} target="_blank">
-                                    Invoice
+                                    ใบกำกับภาษี
                                 </a>
                                 {/* <Link className="button is-small" to={`/orders/out/stock/edit/${props.original.orderId}`}>แก้ไข</Link> */}
                             </div>
@@ -181,7 +181,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    startGetOrders: (accountId) => dispatch(startGetOrders(accountId)),
+    startGetOrders: (accountId, userId) => dispatch(startGetOrders(accountId, userId)),
     startDeleteOrder: (orderId) => dispatch(startDeleteOrder(orderId))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ListPage);

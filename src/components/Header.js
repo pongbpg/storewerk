@@ -35,7 +35,7 @@ export class Header extends React.Component {
     // }
   };
   render() {
-    // console.log('render header', this.state.auth)
+    const roleId = this.state.auth.account.roleId;
     return (
       <nav className="navbar is-dark is-fixed-top has-shadow">
         <div className="container">
@@ -45,13 +45,13 @@ export class Header extends React.Component {
           <div id="navbarMenu" className={`navbar-menu ${this.state.isBurger && 'is-active'}`}>
 
             <div className="navbar-start" >
-              <div className="navbar-item has-dropdown is-hoverable">
+              {/* <div className="navbar-item has-dropdown is-hoverable">
                 <a className="navbar-link"><span className="icon"><MdAccountBox /></span>บัญชี</a>
-                <div className="navbar-dropdown">
-                  <Link className="navbar-item" to="/accounts"><span className="icon"><FaList /></span>รายการ</Link>
-                  <Link className="navbar-item" to="/accounts/search"><span className="icon"><FaSearch /></span>ค้นหา</Link>
-                </div>
-              </div>
+                <div className="navbar-dropdown"> */}
+              <Link className="navbar-item" to="/accounts"><span className="icon"><MdAccountBox /></span>บัญชี</Link>
+              {/* <Link className="navbar-item" to="/accounts/search"><span className="icon"><FaSearch /></span>ค้นหา</Link> */}
+              {/* </div>
+              </div> */}
             </div>
             {this.state.auth.account.accountId != '' &&
               <div className="navbar-end" >
@@ -62,17 +62,18 @@ export class Header extends React.Component {
                     <Link className="navbar-item" to="/inventories"><span className="icon"><FaStore /></span>สินค้าคงเหลือ</Link>
                   </div>
                 </div>
-                <div className="navbar-item has-dropdown is-hoverable">
-                  <a className="navbar-link"><MdSettings />&nbsp;ตั้งค่า</a>
-                  <div className="navbar-dropdown">
-                    <Link className="navbar-item" to="/products"><span className="icon"><FaList /></span>สินค้า</Link>
-                    <Link className="navbar-item" to="/products/categories"><span className="icon"><FaLayerGroup /></span>ประเภท</Link>
-                    <Link className="navbar-item" to="/warehouses"><span className="icon"><FaWarehouse /></span>คลัง</Link>
-                    <Link className="navbar-item" to="/members"><span className="icon"><TiContacts /></span>สมาชิก</Link>
-                    <Link className="navbar-item" to="/payments"><span className="icon"><MdPayment /></span>ชำระเงิน</Link>
-                    <Link className="navbar-item" to="/users"><span className="icon"><FaUserCog /></span>จัดการสิทธิ์</Link>
-                  </div>
-                </div>
+                {['ADMIN', 'FINANCE'].indexOf(roleId) > -1 &&
+                  <div className="navbar-item has-dropdown is-hoverable">
+                    <a className="navbar-link"><MdSettings />&nbsp;ตั้งค่า</a>
+                    <div className="navbar-dropdown">
+                      <Link className="navbar-item" to="/products"><span className="icon"><FaList /></span>สินค้า</Link>
+                      <Link className="navbar-item" to="/products/categories"><span className="icon"><FaLayerGroup /></span>ประเภท</Link>
+                      <Link className="navbar-item" to="/warehouses"><span className="icon"><FaWarehouse /></span>คลัง</Link>
+                      <Link className="navbar-item" to="/members"><span className="icon"><TiContacts /></span>สมาชิก</Link>
+                      <Link className="navbar-item" to="/payments"><span className="icon"><MdPayment /></span>ชำระเงิน</Link>
+                      <Link className="navbar-item" to="/users"><span className="icon"><FaUserCog /></span>จัดการสิทธิ์</Link>
+                    </div>
+                  </div>}
               </div>
             }
             <div className={`navbar-item has-dropdown ${this.state.isMenu && 'is-active'}`}>

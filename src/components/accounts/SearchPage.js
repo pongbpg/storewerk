@@ -1,11 +1,14 @@
 import React from 'react';
+import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 export class IndexPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            auth: props.auth
+            auth: props.auth,
+            accountId: '',
+            loading: ''
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -13,7 +16,9 @@ export class IndexPage extends React.Component {
             this.setState({ auth: nextProps.auth });
         }
     }
-
+    onSearchClick = () => {
+        console.log(this.state.accountId)
+    }
     render() {
         return (
             <div className="container">
@@ -23,10 +28,22 @@ export class IndexPage extends React.Component {
                     </div>
                     <div className="field has-addons">
                         <div className="control is-expanded">
-                            <input className="input has-text-centered is-medium" type="search" placeholder="" />
+                            <NumberFormat className="input has-text-centered is-medium"
+                                value={this.state.accountId}
+                                isNumericString={true}
+                                format="#-####-#####-##-#"
+                                mask="_"
+                                disabled={this.state.loading != ''}
+                                onValueChange={(values) => {
+                                    const { formattedValue, value, floatValue } = values;
+                                    this.setState({ accountId: value })
+                                }} />
+                            {/* <input className="input has-text-centered is-medium" placeholder=""
+                                value={this.state.accountId} onChange={e => this.setState({ accountId: e.target.value })} /> */}
                         </div>
                         <div className="control">
-                            <a className="button is-link is-medium">ค้นหา</a>
+                            <button className="button is-link is-medium"
+                                onClick={this.onSearchClick}>ค้นหา</button>
                         </div>
                     </div>
                 </div >

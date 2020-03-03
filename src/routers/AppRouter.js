@@ -10,6 +10,7 @@ import { WarehousesList, WarehousesAdd, WarehousesEdit } from './pages/Warehouse
 import { PaymentsList, PaymentsAdd, PaymentsEdit } from './pages/Payments';
 import { MembersList, MembersAdd, MembersEdit } from './pages/Members';
 import { OrderList, OrderInStock, OrderOutStock } from './pages/Orders';
+import { UserList, UserAdd } from './pages/Users';
 import InventoriesList from '../components/inventories/ListPage';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -21,16 +22,17 @@ const AppRouter = () => (
       <Switch>
         <PublicRoute path="/" breadcrumbs={[]} component={HomePage} exact={true} />
         <Route path="/login" component={LoginPage} exact={true} />
-        <PrivateRoute path="/home" breadcrumbs={[]} component={HomePage} exact={true} />
+        <PublicRoute path="/home" breadcrumbs={[]} component={HomePage} exact={true} />
         <Route path="/accounts" component={AccountsRoute} />
         <Route path="/products" component={ProductsRoute} />
         <Route path="/warehouses" component={WarehousesRoute} />
         <Route path="/payments" component={PaymentsRoute} />
         <Route path="/members" component={MembersRoute} />
         <Route path="/orders" component={OrdersRoute} />
-        <PublicRoute path="/inventories" component={InventoriesList} breadcrumbs={[
-          { link: "/inventories", name: 'สินค้าคงเหลือ' }, { link: '', name: 'รายการ' }
-        ]} exact={true} />
+        <Route path="/users" component={UsersRoute} />
+        <PublicRoute path="/inventories" component={InventoriesList}
+          breadcrumbs={[{ link: "/inventories", name: 'สินค้าคงเหลือ' }, { link: '', name: 'รายการ' }]}
+          exact={true} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>
@@ -149,5 +151,18 @@ class OrdersRoute extends React.Component {
     )
   }
 }
-
+class UsersRoute extends React.Component {
+  render() {
+    const path = this.props.match.path;
+    return (<div>
+      <PublicRoute path={path}
+        breadcrumbs={[{ link: path, name: 'จัดการสิทธิ์' }, { link: '', name: 'รายการ' }]}
+        component={UserList} exact={true} />
+      <PublicRoute path={path+'/add'}
+        breadcrumbs={[{ link: path, name: 'จัดการสิทธิ์' }, { link: '/add', name: 'เพิ่ม' }]}
+        component={UserAdd} exact={true} />
+    </div>
+    )
+  }
+}
 export default AppRouter;

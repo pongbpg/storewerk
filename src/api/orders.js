@@ -1,9 +1,10 @@
 import axios from 'axios'
 
-export const getOrdersByAccountId = (accountId) => {
+export const getOrdersByAccountId = (accountId, userId) => {
     return axios.get('/api/orders/account', {
         params: {
-            accountId
+            accountId,
+            userId
         }
     })
 }

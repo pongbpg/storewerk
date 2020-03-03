@@ -8,6 +8,7 @@ import categoriesReducer from '../reducers/categories';
 import productsReducer from '../reducers/products';
 import ordersReducer from '../reducers/orders';
 import inventoriesReducer from '../reducers/inventories';
+import usersReducer from '../reducers/users';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default () => {
@@ -21,6 +22,7 @@ export default () => {
       products: productsReducer,
       orders: ordersReducer,
       inventories: inventoriesReducer,
+      users: usersReducer,
     }),
     composeEnhancers(applyMiddleware(thunk))
     // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
