@@ -1,20 +1,23 @@
 import React from 'react';
 import { history } from '../routers/AppRouter';
 import { connect } from 'react-redux';
-import Test from './dashboard/test';
-import { getSaleByMonth } from '../api/dashboard';
+import Sale from './dashboard/sale';
+import Product from './dashboard/product';
+import { getSaleByMonth, getProductByMonth } from '../api/dashboard';
 export class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       auth: props.auth,
-      db1: [],
+      sale: [],
+      product: []
     }
     // if (!!props.auth.uid) {
     //   history.push('/login')
     // }
     // console.log(!!props.auth.uid)
     this.getSaleByMonth = getSaleByMonth;
+    this.getProductByMonth = getProductByMonth;
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth != this.state.auth) {
@@ -22,16 +25,31 @@ export class HomePage extends React.Component {
     }
   }
   componentDidMount() {
-    this.getSaleByMonth('2020', '01')
-      .then(rows => this.setState({ db1: rows.data }))
+    this.getSaleByMonth('2020', '01', this.state.auth.account.accountId)
+      .then(rows => this.setState({ sale: rows.data }))
+    this.getProductByMonth('2020', '01', this.state.auth.account.accountId)
+      .then(rows => this.setState({ product: rows.data }))
   }
 
   render() {
     return (
       <div className="hero">
         <div className="hero-body">
-          {/* Coming Soon! */}
-          <Test data={this.state.db1} />
+          <div className="columns">
+            <div className="column">
+
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-12">
+              <Sale data={this.state.sale} />
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-12">
+              <Product data={this.state.product} />
+            </div>
+          </div>
         </div>
       </div>
     );

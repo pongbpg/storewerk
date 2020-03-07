@@ -4,15 +4,15 @@ import React from 'react';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 var dataPoints = [];
-export default class Test extends React.Component {
+export default class Sale extends React.Component {
 
     render() {
         const options = {
             title: {
-                text: "ยอดขาย มกราคม 2563"
+                text: "ยอดขายประจำเดือน"
             },
             axisY: {
-                title: "Price in THB",
+                title: "มูลค่าบาท",
                 prefix: "฿",
                 includeZero: false
             },
@@ -39,6 +39,7 @@ export default class Test extends React.Component {
         //         return response.json();
         //     })
         //     .then(function (data) {
+        dataPoints = [];
         const data = nextProps.data;
         for (var i = 0; i < data.length; i++) {
             dataPoints.push({
