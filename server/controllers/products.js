@@ -58,10 +58,11 @@ exports.update = (req, res) => {
         val.push(req.body[k])
         return k + '=?'
     })}
-    where accountId = ? and productId =?
+    where accountId = ? and productId =? and categoryId =?
     `;
     val.push(req.body.accountId)
     val.push(req.body.productId)
+    val.push(req.body.categoryId)
     req._sql.query(sql, val)
         .then(row => {
             res.json({

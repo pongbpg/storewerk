@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { startLogout } from '../actions/auth';
 import { MdExitToApp, MdAccountBox, MdPayment, MdSettings } from 'react-icons/md';
 import { TiContacts } from 'react-icons/ti'
+import { DiGitBranch } from 'react-icons/di'
 import { FaStore, FaList, FaSearch, FaClipboardList, FaWarehouse, FaLayerGroup, FaUserCog } from 'react-icons/fa';
 export class Header extends React.Component {
   constructor(props) {
@@ -48,7 +49,7 @@ export class Header extends React.Component {
               {/* <div className="navbar-item has-dropdown is-hoverable">
                 <a className="navbar-link"><span className="icon"><MdAccountBox /></span>บัญชี</a>
                 <div className="navbar-dropdown"> */}
-              <Link className="navbar-item" to="/accounts"><span className="icon"><MdAccountBox /></span>บัญชี</Link>
+              <Link className="navbar-item" to="/accounts"><span className="icon"><MdAccountBox /></span>บัญชีผู้ใช้</Link>
               {/* <Link className="navbar-item" to="/accounts/search"><span className="icon"><FaSearch /></span>ค้นหา</Link> */}
               {/* </div>
               </div> */}
@@ -66,9 +67,10 @@ export class Header extends React.Component {
                   <div className="navbar-item has-dropdown is-hoverable">
                     <a className="navbar-link"><MdSettings />&nbsp;ตั้งค่า</a>
                     <div className="navbar-dropdown">
-                      <Link className="navbar-item" to="/products"><span className="icon"><FaList /></span>สินค้า</Link>
                       <Link className="navbar-item" to="/products/categories"><span className="icon"><FaLayerGroup /></span>ประเภท</Link>
+                      <Link className="navbar-item" to="/products"><span className="icon"><FaList /></span>สินค้า</Link>
                       <Link className="navbar-item" to="/warehouses"><span className="icon"><FaWarehouse /></span>คลัง</Link>
+                      <Link className="navbar-item" to="/branches"><span className="icon"><DiGitBranch /></span>สาขา</Link>
                       <Link className="navbar-item" to="/members"><span className="icon"><TiContacts /></span>สมาชิก</Link>
                       <Link className="navbar-item" to="/payments"><span className="icon"><MdPayment /></span>ชำระเงิน</Link>
                       <Link className="navbar-item" to="/users"><span className="icon"><FaUserCog /></span>จัดการสิทธิ์</Link>

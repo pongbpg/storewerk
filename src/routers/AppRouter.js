@@ -7,6 +7,7 @@ import NotFoundPage from '../components/NotFoundPage';
 import { AccountSearch, AccountAdd, AccountEdit, AccountList } from './pages/Accounts';
 import { ProductCatsList, ProductCatsAdd, ProductCatsEdit, ProductList, ProductAdd, ProductEdit } from './pages/Products';
 import { WarehousesList, WarehousesAdd, WarehousesEdit } from './pages/Warehouses';
+import { BranchesList, BranchesAdd, BranchesEdit } from './pages/Branches';
 import { PaymentsList, PaymentsAdd, PaymentsEdit } from './pages/Payments';
 import { MembersList, MembersAdd, MembersEdit } from './pages/Members';
 import { OrderList, OrderInStock, OrderOutStock } from './pages/Orders';
@@ -26,6 +27,7 @@ const AppRouter = () => (
         <Route path="/accounts" component={AccountsRoute} />
         <Route path="/products" component={ProductsRoute} />
         <Route path="/warehouses" component={WarehousesRoute} />
+        <Route path="/branches" component={BranchesRoute} />
         <Route path="/payments" component={PaymentsRoute} />
         <Route path="/members" component={MembersRoute} />
         <Route path="/orders" component={OrdersRoute} />
@@ -96,6 +98,23 @@ class WarehousesRoute extends React.Component {
       <PublicRoute path={path + '/edit/:code'}
         breadcrumbs={[{ link: path, name: 'คลัง' }, { link: '/edit', name: 'แก้ไข' }]}
         component={WarehousesEdit} exact={true} />
+    </div>
+    )
+  }
+}
+class BranchesRoute extends React.Component {
+  render() {
+    const path = this.props.match.path;
+    return (<div>
+      <PublicRoute path={path}
+        breadcrumbs={[{ link: path, name: 'คลัง' }, { link: '', name: 'รายการ' }]}
+        component={BranchesList} exact={true} />
+      <PublicRoute path={path + '/add'}
+        breadcrumbs={[{ link: path, name: 'คลัง' }, { link: '/add', name: 'เพิ่ม' }]}
+        component={BranchesAdd} exact={true} />
+      <PublicRoute path={path + '/edit/:code'}
+        breadcrumbs={[{ link: path, name: 'คลัง' }, { link: '/edit', name: 'แก้ไข' }]}
+        component={BranchesEdit} exact={true} />
     </div>
     )
   }

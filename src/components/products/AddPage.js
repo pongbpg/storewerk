@@ -63,7 +63,7 @@ export class AddPage extends React.Component {
     onSubmit = (e) => {
         e.preventDefault();
         this.setState({ loading: 'is-loading' })
-        if (this.state.products.find(f => f.productId == this.state.product.productId)) {
+        if (this.state.products.find(f => f.categoryId + f.productId == this.state.product.categoryId + this.state.product.productId)) {
             this.setState({
                 loading: '',
                 error: 'รหัสสินค้านี้มีการใช้แล้ว'

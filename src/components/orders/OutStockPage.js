@@ -652,7 +652,7 @@ export class OutStockPage extends React.Component {
                                                             this.state.order.customerName == '' ||
                                                             this.state.order.customerAddr == '' ||
                                                             this.state.order.warehouseId == '' ||
-                                                            this.state.orderDetail.length == 0
+                                                            this.state.orderDetail == null
                                                         }
                                                         onClick={this.onOrderSave}
                                                     >บันทึก</button>
