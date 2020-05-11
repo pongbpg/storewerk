@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const CompressionPlugin = require('compression-webpack-plugin');
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -13,6 +14,8 @@ if (process.env.NODE_ENV === 'test') {
 
 module.exports = (env) => {
     const isProduction = env === 'production';
+
+    console.log('env', env, isProduction)
     const CSSExtract = new ExtractTextPlugin('styles.css');
     return {
         entry: ['babel-polyfill', './src/app.js'],
@@ -64,6 +67,7 @@ module.exports = (env) => {
             ]
         },
         plugins: [
+            new CompressionPlugin(),
             CSSExtract,
             new webpack.DefinePlugin({
                 'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
