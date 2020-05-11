@@ -23,10 +23,10 @@ exports.getDetailById = (req, res) => {
 exports.getByAccountId = (req, res) => {
     const sql = `select o.*
     from orders o
-    left join users u on u.userId = o.creator and u.accountId = o.accountId
-    where o.accountId=?  and (o.creator=? or u.roleId = 'SALE')
+    left join users u on u.userId = ? and u.accountId = o.accountId
+    where o.accountId=?  and (o.creator=? or u.roleId IN ('ADMIN','FINANCE'))
     order by o.orderId desc`
-    req._sql.query(sql, [req.query.accountId, req.query.userId])
+    req._sql.query(sql, [req.query.userId, req.query.accountId, req.query.userId])
         .then(rows => {
             res.json(rows)
         })
