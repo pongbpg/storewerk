@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'test') {
 module.exports = (env) => {
     const isProduction = env === 'production';
 
-    console.log('env', env, isProduction)
+    // console.log('env', env, isProduction)
     const CSSExtract = new ExtractTextPlugin('styles.css');
     return {
         entry: ['babel-polyfill', './src/app.js'],
@@ -67,7 +67,13 @@ module.exports = (env) => {
             ]
         },
         plugins: [
-            new CompressionPlugin(),
+            new CompressionPlugin({
+                filename: '[path].gz[query]',
+                algorithm: 'gzip',
+                test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
+                threshold: 10240,
+                minRatio: 0.8
+            }),
             CSSExtract,
             new webpack.DefinePlugin({
                 'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
