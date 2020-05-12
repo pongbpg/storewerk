@@ -19,22 +19,22 @@ app.use(mariadb);
 app.use('/api', routers);
 
 //html
-
+app.use(compression());
+app.use(express.static(publicPath));
 app.get('*.js', (req, res, next) => {
     req.url = req.url + '.gz';
     res.set('Content-Encoding', 'gzip');
+    res.set('Content-Type', 'text/javascript');
     next();
 });
 
 app.get('*.css', (req, res, next) => {
     req.url = req.url + '.gz';
     res.set('Content-Encoding', 'gzip');
-    // res.set('Content-Type', 'text/css');
+    res.set('Content-Type', 'text/css');
     next();
 });
 app.get('*', (req, res) => {
-    app.use(compression());
-    app.use(express.static(publicPath));
     res.sendFile(path.join(publicPath, 'index.html'))
 });
 app.listen(port, () => console.log('Server is up port:' + port));
