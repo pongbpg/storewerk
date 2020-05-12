@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const compression = require('compression');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CompressionPlugin = require('compression-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
