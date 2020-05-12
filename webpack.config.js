@@ -1,7 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
+const compression = require('compression');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CompressionPlugin = require('compression-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -20,8 +23,11 @@ module.exports = (env) => {
     return {
         entry: ['babel-polyfill', './src/app.js'],
         output: {
-            path: path.join(__dirname, 'public', 'dist'),
-            filename: 'bundle.js'
+            path: path.resolve(__dirname, 'public', 'dist'),
+            // publicPath: 'dist/',
+            filename: '[name].bundle.js',
+            chunkFilename: '[name].bundle.js',
+            // path: path.resolve(process.cwd(), 'public', 'dist'),
         },
         module: {
             rules: [
@@ -67,6 +73,7 @@ module.exports = (env) => {
             ]
         },
         plugins: [
+            new webpack.ProgressPlugin(),
             new CompressionPlugin({
                 filename: '[path].gz[query]',
                 algorithm: 'gzip',
@@ -75,6 +82,7 @@ module.exports = (env) => {
                 minRatio: 0.8
             }),
             CSSExtract,
+            new CleanWebpackPlugin(),
             new webpack.DefinePlugin({
                 'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
                 'process.env.FIREBASE_AUTH_DOMAIN': JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
@@ -90,7 +98,7 @@ module.exports = (env) => {
                 'process.env.MARIADB_PASSWORD': JSON.stringify(process.env.MARIADB_PASSWORD)
             })
         ],
-        devtool: isProduction ? 'source-map' : 'cheap-module-eval-source-map',
+        devtool: isProduction ? false : 'cheap-module-eval-source-map',
         devServer: {
             contentBase: path.join(__dirname, 'public'),
             historyApiFallback: true,
@@ -98,7 +106,14 @@ module.exports = (env) => {
             proxy: {
                 '/api': 'http://localhost:3000'
             },
-            port: 8080
+            port: 8080,
+            compress: true
+        },
+        optimization: {
+            minimizer: [new UglifyJsPlugin()],
+            splitChunks: {
+                chunks: 'all',
+            }
         }
     }
 };
