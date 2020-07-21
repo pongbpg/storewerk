@@ -37,7 +37,7 @@ export class HomePage extends React.Component {
         <div className="hero-body">
           <div className="columns">
             <div className="column">
-
+              ธวัชชัย
             </div>
           </div>
           <div className="columns">

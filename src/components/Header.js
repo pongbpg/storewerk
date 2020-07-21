@@ -5,7 +5,7 @@ import { startLogout } from '../actions/auth';
 import { MdExitToApp, MdAccountBox, MdPayment, MdSettings } from 'react-icons/md';
 import { TiContacts } from 'react-icons/ti'
 import { DiGitBranch } from 'react-icons/di'
-import { FaStore, FaList, FaSearch, FaClipboardList, FaWarehouse, FaLayerGroup, FaUserCog } from 'react-icons/fa';
+import { FaStore, FaList, FaSearch, FaChartLine, FaWarehouse, FaLayerGroup, FaUserCog } from 'react-icons/fa';
 export class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -41,7 +41,7 @@ export class Header extends React.Component {
       <nav className="navbar is-dark is-fixed-top has-shadow">
         <div className="container">
           <div className="navbar-brand">
-            <Link to="/home" className="navbar-item title">StoreWerk</Link>
+            <Link to="/home" className="navbar-item title font-sarabun">StoreWerk</Link>
           </div>
           <div id="navbarMenu" className={`navbar-menu ${this.state.isBurger && 'is-active'}`}>
 
@@ -49,7 +49,7 @@ export class Header extends React.Component {
               {/* <div className="navbar-item has-dropdown is-hoverable">
                 <a className="navbar-link"><span className="icon"><MdAccountBox /></span>บัญชี</a>
                 <div className="navbar-dropdown"> */}
-              <Link className="navbar-item" to="/accounts"><span className="icon"><MdAccountBox /></span>บัญชีผู้ใช้</Link>
+              <Link className="navbar-item" to="/accounts"><span className="icon"><MdAccountBox /></span>บัญชี</Link>
               {/* <Link className="navbar-item" to="/accounts/search"><span className="icon"><FaSearch /></span>ค้นหา</Link> */}
               {/* </div>
               </div> */}
@@ -61,6 +61,7 @@ export class Header extends React.Component {
                   <div className="navbar-dropdown">
                     <Link className="navbar-item" to="/orders"><span className="icon"><FaList /></span>ออเดอร์</Link>
                     <Link className="navbar-item" to="/inventories"><span className="icon"><FaStore /></span>สินค้าคงเหลือ</Link>
+                    <Link className="navbar-item" to="/reports"><span className="icon"><FaChartLine /></span>รายงาน</Link>
                   </div>
                 </div>
                 {['ADMIN', 'FINANCE'].indexOf(roleId) > -1 &&

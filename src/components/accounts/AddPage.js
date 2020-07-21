@@ -12,9 +12,15 @@ export class AddPage extends React.Component {
         super(props);
         this.state = {
             auth: props.auth,
-            account: { accountName: '', accountTel: '', accountFax: '', accountId: '', accountAddr: '', accountLogo: null },
-            imageFile: null,
-            imagePreviewUrl: null,
+            account: { accountName: '', accountTel: '', accountFax: '', accountId: '', accountAddr: '', accountLogo: null, accountLicense: null },
+            logo: {
+                file: null,
+                preview: null
+            },
+            license: {
+                file: null,
+                preview: null
+            },
             errors: { accountId: '', msg: '' },
             loading: ''
         }
@@ -26,17 +32,24 @@ export class AddPage extends React.Component {
             this.setState({ auth: nextProps.auth });
         }
     }
-    fileChangedHandler = event => {
+    fileChange = event => {
+        const name = event.target.name;
         const file = event.target.files;
         this.setState({
-            imageFile: file.length > 0 ? event.target.files[0] : null
+            [name]: {
+                file: file.length > 0 ? event.target.files[0] : null
+            }
         })
+
 
         let reader = new FileReader();
 
         reader.onloadend = () => {
             this.setState({
-                imagePreviewUrl: file.length > 0 ? reader.result : null
+                [name]: {
+                    ...this.state[name],
+                    preview: file.length > 0 ? reader.result : null
+                }
             });
         }
         if (file.length > 0) {
@@ -61,7 +74,8 @@ export class AddPage extends React.Component {
         this.setState({ loading: 'is-loading' })
         this.props.startNewAccount({
             ...this.state.account,
-            accountLogo: this.state.imagePreviewUrl,
+            accountLogo: this.state.logo.preview,
+            accountLicense: this.state.license.preview,
             creator: this.state.auth.email
         })
             .then(res => {
@@ -217,13 +231,13 @@ export class AddPage extends React.Component {
                             <div className="field  is-grouped">
                                 <div className="control">
                                     <figure className="image is-128x128">
-                                        <img src={this.state.imageFile ? this.state.imagePreviewUrl : this.state.account.accountLogo} />
+                                        <img src={this.state.logo.file ? this.state.logo.preview : this.state.account.accountLogo} />
                                     </figure>
                                 </div>
                                 <div className="control">
                                     <div className="file has-name is-right">
                                         <label className="file-label">
-                                            <input type="file" className="file-input" onChange={this.fileChangedHandler} />
+                                            <input type="file" className="file-input" name="logo" onChange={this.fileChange} />
                                             <span className="file-cta">
                                                 <span className="file-icon">
                                                     <FaFileImage />
@@ -231,8 +245,8 @@ export class AddPage extends React.Component {
                                                 <span className="file-label">เลือกรูปภาพ</span>
                                             </span>
                                             {
-                                                this.state.imageFile &&
-                                                <span className="file-name">{this.state.imageFile.name}</span>
+                                                this.state.logo.file &&
+                                                <span className="file-name">{this.state.logo.file.name}</span>
                                             }
                                         </label>
                                     </div>
@@ -240,6 +254,38 @@ export class AddPage extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <div className="field is-horizontal">
+                        <div className="field-label is-normal">
+                            <label className="label">ลายเซ็นต์</label>
+                        </div>
+                        <div className="field-body">
+                            <div className="field  is-grouped">
+                                <div className="control">
+                                    <figure className="image is-128x128">
+                                        <img src={this.state.license.file ? this.state.license.preview : this.state.account.accountLicense} />
+                                    </figure>
+                                </div>
+                                <div className="control">
+                                    <div className="file has-name is-right">
+                                        <label className="file-label">
+                                            <input type="file" className="file-input" name="license" onChange={this.fileChange} />
+                                            <span className="file-cta">
+                                                <span className="file-icon">
+                                                    <FaFileImage />
+                                                </span>
+                                                <span className="file-label">เลือกรูปภาพ</span>
+                                            </span>
+                                            {
+                                                this.state.license.file &&
+                                                <span className="file-name">{this.state.license.file.name}</span>
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="field is-horizontal">
                         <div className="field-label">
                         </div>

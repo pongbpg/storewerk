@@ -6,7 +6,8 @@ import { login, startGetUserByEmail, logout } from './actions/auth';
 import AppRouter, { history } from './routers/AppRouter';
 import configureStore from './store/configureStore';
 import './styles/styles.scss';
-import 'bulma/css/bulma.css'
+import './styles/notfound.css';
+import 'bulma/css/bulma.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import { auth } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';

@@ -4,6 +4,7 @@ import { createBrowserHistory } from 'history';
 import LoginPage from '../components/LoginPage';
 import HomePage from '../components/HomePage';
 import NotFoundPage from '../components/NotFoundPage';
+import ReportPage from '../components/ReportPage';
 import { AccountSearch, AccountAdd, AccountEdit, AccountList } from './pages/Accounts';
 import { ProductCatsList, ProductCatsAdd, ProductCatsEdit, ProductList, ProductAdd, ProductEdit } from './pages/Products';
 import { WarehousesList, WarehousesAdd, WarehousesEdit } from './pages/Warehouses';
@@ -32,6 +33,7 @@ const AppRouter = () => (
         <Route path="/members" component={MembersRoute} />
         <Route path="/orders" component={OrdersRoute} />
         <Route path="/users" component={UsersRoute} />
+        <PublicRoute path="/reports" component={ReportPage} breadcrumbs={[{ link: '', name: 'รายงาน' }]} exact={true} />
         <PublicRoute path="/inventories" component={InventoriesList}
           breadcrumbs={[{ link: "/inventories", name: 'สินค้าคงเหลือ' }, { link: '', name: 'รายการ' }]}
           exact={true} />
@@ -177,7 +179,7 @@ class UsersRoute extends React.Component {
       <PublicRoute path={path}
         breadcrumbs={[{ link: path, name: 'จัดการสิทธิ์' }, { link: '', name: 'รายการ' }]}
         component={UserList} exact={true} />
-      <PublicRoute path={path+'/add'}
+      <PublicRoute path={path + '/add'}
         breadcrumbs={[{ link: path, name: 'จัดการสิทธิ์' }, { link: '/add', name: 'เพิ่ม' }]}
         component={UserAdd} exact={true} />
     </div>
