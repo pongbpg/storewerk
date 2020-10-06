@@ -40,7 +40,7 @@ exports.getOrderNoLatest = (req, res) => {
 exports.created = (req, res) => {
     const keys = Object.keys(req.body.order);
     const sql = `insert into orders(${keys.join(',')}) values ?`;
-
+    console.log(sql, _.values(req.body.order))
     req._sql.query(sql, [_.values(req.body.order)])
         .then(rows => {
             const keys2 = Object.keys(req.body.orderDetail[0]);

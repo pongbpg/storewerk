@@ -38,7 +38,7 @@ export class InStockPage extends React.Component {
                 vatPercent: 0,
                 vatPrice: 0,
                 netTotal: 0,
-                isStatus: 'PURCHASE'
+                isStatus: 'REQUESTED'
             },
             // objects: [{ type: 'IN', value: 'BUY', text: 'ซื้อ' }, { type: 'IN', value: 'CLAIM', text: 'เคลม' }],
             loading: '',
@@ -159,6 +159,7 @@ export class InStockPage extends React.Component {
                 orderDetail: this.state.orderDetail.map(m => {
                     return {
                         ...m,
+                        productImg: m.productImg == null ? '' : m.productImg,
                         orderId,
                         accountId,
                         creator
@@ -338,7 +339,7 @@ export class InStockPage extends React.Component {
                                                         }
                                                     })}
                                                     getOptionValue={(option => option.productId)}
-                                                    getOptionLabel={(option => option.productName + ' (' + option.productId + ')')}
+                                                    getOptionLabel={(option => option.productName + ' (' + option.categoryId + '/' + option.productId + ')')}
                                                 />
                                             </div>
                                         </div>

@@ -46,11 +46,23 @@ export class ListPage extends React.Component {
     }
     render() {
         const columns = [
+
             {
                 Header: '#',
                 Cell: props => props.index + 1,
                 className: 'has-text-centered striped',
                 maxWidth: 60
+            },
+            {
+                Header: 'รูปสินค้า',
+                headerClassName: 'has-text-centered',
+                Cell: props => {
+                    return (
+                        <figure className="image is-96x96">
+                            <img src={props.original.productImg} />
+                        </figure>
+                    )
+                }
             },
             {
                 Header: 'รหัสประเภท',
@@ -77,15 +89,9 @@ export class ListPage extends React.Component {
                 accessor: 'productName'
             },
             {
-                Header: 'หน่วยนับ',
-                headerClassName: 'has-text-centered',
-                className:'has-text-centered',
-                accessor: 'unitName'
-            },
-            {
                 Header: 'ราคาขาย',
                 headerClassName: 'has-text-right',
-                className:'has-text-right',
+                className: 'has-text-right',
                 accessor: 'productPrice'
             },
             {

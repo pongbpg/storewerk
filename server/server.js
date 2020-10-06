@@ -5,6 +5,7 @@ const app = express();
 const publicPath = path.join(__dirname, '..', 'public');
 const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser')
+const cors = require('cors');
 const moment = require('moment');
 const mariadb = require('./mariadb');
 const routers = require('./routes/index');
@@ -13,6 +14,19 @@ moment.locale('th');
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Set up a whitelist and check against it:
+var whitelist = ['http://localhost:8080', 'https://storewerk.me']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+// Then pass them to cors:
+// app.use(cors());
 
 //mariadb
 app.use(mariadb);

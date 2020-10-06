@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { startGetCategories } from '../../actions/categories';
 import { startUpdateProduct } from '../../actions/products';
 import { Link } from 'react-router-dom';
+import { FaFileImage } from 'react-icons/fa'
 import { history } from '../../routers/AppRouter';
 import NumberFormat from 'react-number-format'
 import _ from 'underscore';
@@ -12,7 +13,11 @@ export class EditPage extends React.Component {
         this.state = {
             auth: props.auth,
             product: props.products.find(f => f.productId == props.match.params.code) ||
-                { categoryId: '', categoryName: '', productId: '', productName: '', unitName: '', productPrice: 0, productCost: 0 },
+                { categoryId: '', categoryName: '', productId: '', productName: '', unitName: '', productPrice: 0, productCost: 0, productImg: null },
+            productImg: {
+                file: null,
+                preview: null
+            },
             categories: props.categories || [],
             errors: '',
             loading: ''
@@ -63,6 +68,7 @@ export class EditPage extends React.Component {
         this.setState({ loading: 'is-loading' })
         this.props.startUpdateProduct({
             ..._.pick(this.state.product, 'accountId', 'categoryId', 'productId', 'productName', 'unitName', 'productPrice', 'productCost'),
+            productImg: this.state.productImg.preview,
             updater: this.state.auth.email
         })
             .then(res => {
@@ -73,6 +79,31 @@ export class EditPage extends React.Component {
                     history.push('/products')
                 }
             })
+    }
+    fileChange = event => {
+        const name = event.target.name;
+        const file = event.target.files;
+        // console.log(files[0])
+        this.setState({
+            [name]: {
+                file: file.length > 0 ? event.target.files[0] : null
+            }
+        })
+
+
+        let reader = new FileReader();
+
+        reader.onloadend = () => {
+            this.setState({
+                [name]: {
+                    ...this.state[name],
+                    preview: file.length > 0 ? reader.result : null
+                }
+            });
+        }
+        if (file.length > 0) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
     }
 
     render() {
@@ -113,6 +144,35 @@ export class EditPage extends React.Component {
                             <input className="input" type="text" name="productName"
                                 disabled={this.state.loading != ''}
                                 value={this.state.product.productName} onChange={this.onInputChange} required />
+                        </div>
+                    </div>
+                    <div className="field" style={{ paddingTop: '20px' }}>
+                        <label className="label">ภาพสินค้า</label>
+                        <div className="field-body">
+                            <div className="field is-grouped">
+                                <div className="control">
+                                    <figure className="image is-128x128">
+                                        <img src={this.state.productImg.file ? this.state.productImg.preview : this.state.product.productImg} />
+                                    </figure>
+                                </div>
+                                <div className="control">
+                                    <div className="file has-name is-right">
+                                        <label className="file-label">
+                                            <input type="file" className="file-input" name="productImg" onChange={this.fileChange} />
+                                            <span className="file-cta">
+                                                <span className="file-icon">
+                                                    <FaFileImage />
+                                                </span>
+                                                <span className="file-label">เลือกรูปภาพ</span>
+                                            </span>
+                                            {
+                                                this.state.productImg.file &&
+                                                <span className="file-name">{this.state.productImg.file.name}</span>
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="field" style={{ paddingTop: '20px' }}>

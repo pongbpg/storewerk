@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { history } from '../../routers/AppRouter';
 import { startGetOrders, startDeleteOrder } from '../../actions/orders'
 import ReactTable from 'react-table-v6'
+import ReactTooltip from "react-tooltip";
 import { FaSearch } from 'react-icons/fa';
 import NumberFormat from 'react-number-format'
 import 'react-table-v6/react-table.css'
@@ -15,7 +16,9 @@ export class ListPage extends React.Component {
         this.state = {
             auth: props.auth,
             search: '',
-            orders: props.orders
+            orders: props.orders,
+            selected: {},
+            selectAll: 0
         }
         if (props.auth.account.accountId == '') {
             alert('คุณยังไม่ได้เลือกบัญชี!!')
@@ -37,28 +40,50 @@ export class ListPage extends React.Component {
         this.props.startDeleteOrder(orderId)
 
     }
+    onSelectChange = (orderId, e) => {
+        const newSelected = Object.assign({}, this.state.selected)
+        newSelected[orderId] = e.target.checked
+        this.setState({
+            selected: newSelected
+        });
+    }
+    onRowSelect = (orderId) => {
+        const newSelected = Object.assign({}, this.state.selected)
+        newSelected[orderId] = !newSelected[orderId];
+        this.setState({
+            selected: newSelected
+        });
+    }
+
     render() {
+
         const columns = [
             {
-                Header: '#',
-                Cell: props => props.index + 1,
+                Header: '',
+                accessor: 'orderId',
+                Cell: props => {
+                    // console.log(props.original.orderId, props.value)
+                    return (
+                        <input type="checkbox" checked={this.state.selected[props.value] == true}
+                            onChange={e => this.onSelectChange(props.value, e)} />
+                    )
+                },
                 className: 'has-text-centered striped',
                 maxWidth: 50
             },
+            // {
+            //     Header: '#',
+            //     Cell: props => props.index + 1,
+            //     className: 'has-text-centered striped',
+            //     maxWidth: 50
+            // },
             {
-                Header: 'วันที่',
+                Header: 'วันที่ทำรายการ',
                 headerClassName: 'has-text-centered',
                 className: 'has-text-centered',
-                accessor: 'orderDate',
-                maxWidth: 120,
-                Cell: props => moment(props.value).format('D/M/YY')
-            },
-            {
-                Header: 'ประเภท',
-                headerClassName: 'has-text-centered',
-                className: 'has-text-centered',
-                accessor: 'orderTypeId',
-                maxWidth: 80
+                accessor: 'created',
+                maxWidth: 140,
+                Cell: props => moment(props.value).format('D/M/YY H:mm:ss')
             },
             {
                 Header: 'ชื่อ',
@@ -79,12 +104,15 @@ export class ListPage extends React.Component {
                 maxWidth: 100,
                 Cell: props => {
                     return (
-                        <NumberFormat
-                            displayType="text"
-                            thousandSeparator={true}
-                            decimalScale={2}
-                            value={props.value}
-                        />
+                        <div>
+                            <NumberFormat
+                                displayType="text"
+                                thousandSeparator={true}
+                                decimalScale={2}
+                                value={props.value}
+                            />
+                        </div>
+
                     )
                 }
             },
@@ -109,14 +137,15 @@ export class ListPage extends React.Component {
                 Header: 'สถานะ',
                 headerClassName: 'has-text-centered',
                 className: 'has-text-centered',
-                accessor: 'isCancel',
+                accessor: 'isStatus',
                 maxWidth: 100,
                 Cell: props => {
+                    const isCancel = props.original.isCancel;
                     const colors = [{ status: 'N', color: 'success', text: 'ปกติ' }, { status: 'Y', color: 'danger', text: 'ยกเลิก' }]
-                    const value = colors.find(f => f.status == props.value);
+                    const value = colors.find(f => f.status == isCancel);
                     return (
                         <span className={`tag is-${value.color}`}>
-                            {value.text}
+                            {props.value}
                         </span>
                     )
                 }
@@ -144,31 +173,55 @@ export class ListPage extends React.Component {
                 }
             },
         ]
+
+        const countSelected = Object.keys(this.state.selected).map(m => ({ selected: this.state.selected[m] })).filter(f => f.selected == true).length;
         return (
             <div className="box">
                 <nav className="level">
                     <div className="level-left">
-                        <Link className="button is-link is-rounded is-hovered" to="/orders/in/stock">นำเข้า</Link>
-                        <Link className="button is-warning is-rounded is-hovered" to="/orders/out/stock">จ่ายออก</Link>
+                        <div className="level-item">
+                            <Link className="button is-link is-rounded is-hovered" to="/orders/in/stock">สั่งซื้อ</Link>
+                        </div>
+                        <div className="level-item">
+                            <Link className="button is-warning is-rounded is-hovered" to="/orders/out/stock">จำหน่าย</Link>
+                        </div>
+
                     </div>
                     <div className="level-right">
-                        <div className="field">
-                            <p className="control is-expanded has-icons-left">
-                                <input className="input" type="text" placeholder="ค้นหา"
-                                    value={this.state.search}
-                                    onChange={(e) => this.setState({ search: e.target.value })} />
-                                <span className="icon is-small is-left">
-                                    <FaSearch />
-                                </span>
-                            </p>
+                        <div className="level-item">
+                            <div className="field">
+                                <button className="button" onClick={e => console.log(this.state.selected)}>Print ({countSelected})</button>
+                            </div>
+                        </div>
+                        <div className="level-item">
+                            <div className="field">
+                                <p className="control is-expanded has-icons-left">
+                                    <input className="input" type="text" placeholder="ค้นหา"
+                                        value={this.state.search}
+                                        onChange={(e) => this.setState({ search: e.target.value })} />
+                                    <span className="icon is-small is-left">
+                                        <FaSearch />
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </nav>
-                <ReactTable className="table -highlight"
+                <ReactTable className="table -highlight -striped" style={{ cursor: 'pointer' }}
                     data={this.state.orders}
                     columns={columns}
                     resolveData={data => data.map(row => row)}
-                    defaultPageSize={10}
+                    defaultPageSize={30}
+                    getTrProps={(state, rowInfo, column) => {
+                        return {
+                            onClick: (e) => {
+                                // console.log(e.target.selected)
+                                // console.log(rowInfo)
+                                this.onRowSelect(rowInfo.original.orderId)
+                            }
+                            // this.props.history.push("/order/" + rowInfo.original.orderTypeId.toLowerCase() + "/stock/" + rowInfo.original.orderId)
+                        }
+                    }}
                 />
             </div>
         );
