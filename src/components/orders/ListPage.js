@@ -71,12 +71,13 @@ export class ListPage extends React.Component {
                 className: 'has-text-centered striped',
                 maxWidth: 50
             },
-            // {
-            //     Header: '#',
-            //     Cell: props => props.index + 1,
-            //     className: 'has-text-centered striped',
-            //     maxWidth: 50
-            // },
+            {
+                Header: 'วันที่สั่งซื้อ',
+                accessor: 'orderDate',
+                Cell: props => moment(props.value).format('D/M/YY'),
+                className: 'has-text-centered striped',
+                maxWidth: 80
+            },
             {
                 Header: 'วันที่ทำรายการ',
                 headerClassName: 'has-text-centered',
