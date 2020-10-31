@@ -9,6 +9,7 @@ const orders = require('./orders');
 const inventories = require('./inventories');
 const users = require('./users');
 const dashboard = require('./dashboard');
+const prints = require('./prints');
 
 router.use('/accounts', accounts)
 router.use('/categories', categories)
@@ -20,6 +21,7 @@ router.use('/orders', orders)
 router.use('/inventories', inventories)
 router.use('/users', users)
 router.use('/dashboard', dashboard)
+router.use('/prints', prints)
 
 
 module.exports = router

@@ -31,8 +31,8 @@ module.exports = (env) => {
         module: {
             rules: [
                 {
-                    loader: 'json-loader',
-                    test: /\.json$/
+                    test: /\.json$/,
+                    loader: 'json-loader'
                 },
                 {
                     loader: 'babel-loader',

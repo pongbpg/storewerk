@@ -39,8 +39,9 @@ const logOut = () => {
 auth.onAuthStateChanged((user) => {
   // console.log(user)
   if (user) {
+    // console.log(user)
     // console.log('yes')
-    store.dispatch(startGetUserByEmail(user.email))
+    store.dispatch(startGetUserByEmail(user))
       .then(doc => {
         store.dispatch(login({ ...user.providerData[0], ...doc }))
         renderApp()

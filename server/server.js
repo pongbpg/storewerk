@@ -9,6 +9,7 @@ const cors = require('cors');
 const moment = require('moment');
 const mariadb = require('./mariadb');
 const routers = require('./routes/index');
+const jwt = require('jsonwebtoken')
 moment.locale('th');
 
 app.use(bodyParser.json({ limit: '10mb', extended: true }));

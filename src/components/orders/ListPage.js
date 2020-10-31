@@ -4,9 +4,9 @@ import { Link, Redirect } from 'react-router-dom';
 import { history } from '../../routers/AppRouter';
 import { startGetOrders, startDeleteOrder } from '../../actions/orders'
 import ReactTable from 'react-table-v6'
-import ReactTooltip from "react-tooltip";
 import { FaSearch } from 'react-icons/fa';
 import NumberFormat from 'react-number-format'
+import jsrsasign from 'jsrsasign';
 import 'react-table-v6/react-table.css'
 import moment from 'moment';
 moment.locale('th');
@@ -161,12 +161,12 @@ export class ListPage extends React.Component {
                         <div className="field is-grouped-centered">
                             <div className="control">
                                 {/* {props.original.isStatus == 'SALE' && */}
-                                <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
-                                {/* } */}
+                                {/* <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
+                              
                                 <a className="button is-small"
                                     href={`http://rpt.storewerk.me/invoice?orderId=${props.original.orderId}`} target="_blank">
                                     ใบกำกับภาษี
-                                </a>
+                                </a> */}
                                 {/* <Link className="button is-small" to={`/orders/out/stock/edit/${props.original.orderId}`}>แก้ไข</Link> */}
                             </div>
                         </div >
@@ -191,7 +191,17 @@ export class ListPage extends React.Component {
                     <div className="level-right">
                         <div className="level-item">
                             <div className="field">
-                                <button className="button" onClick={e => console.log(this.state.selected)}>Print ({countSelected})</button>
+                                <button className="button" onClick={e => {
+                                    let orders = [];
+                                    Object.keys(this.state.selected).map(key => {
+                                        if (this.state.selected[key]) orders.push(key)
+                                    })
+                                    const a = btoa('id=' + encodeURIComponent(orders));
+                                    const b = atob(a);
+                                    console.log(a)
+                                    console.log(b)
+                                    window.open('/print/request?' + a, 'Data', 'height=600,width=800');
+                                }}>Print ({countSelected})</button>
                             </div>
                         </div>
                         <div className="level-item">
@@ -216,8 +226,6 @@ export class ListPage extends React.Component {
                     getTrProps={(state, rowInfo, column) => {
                         return {
                             onClick: (e) => {
-                                // console.log(e.target.selected)
-                                // console.log(rowInfo)
                                 this.onRowSelect(rowInfo.original.orderId)
                             }
                             // this.props.history.push("/order/" + rowInfo.original.orderTypeId.toLowerCase() + "/stock/" + rowInfo.original.orderId)

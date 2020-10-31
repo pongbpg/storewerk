@@ -159,7 +159,7 @@ export class InStockPage extends React.Component {
                 orderDetail: this.state.orderDetail.map(m => {
                     return {
                         ...m,
-                        productImg: m.productImg == null ? '' : m.productImg,
+                        // productImg: m.productImg == null ? '' : m.productImg,
                         orderId,
                         accountId,
                         creator

@@ -13,6 +13,7 @@ import { PaymentsList, PaymentsAdd, PaymentsEdit } from './pages/Payments';
 import { MembersList, MembersAdd, MembersEdit } from './pages/Members';
 import { OrderList, OrderInStock, OrderOutStock } from './pages/Orders';
 import { UserList, UserAdd } from './pages/Users';
+import { PrintRequest } from './pages/Prints';
 import InventoriesList from '../components/inventories/ListPage';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -33,6 +34,7 @@ const AppRouter = () => (
         <Route path="/members" component={MembersRoute} />
         <Route path="/orders" component={OrdersRoute} />
         <Route path="/users" component={UsersRoute} />
+        <Route path='/print' component={PrintsRoute} />
         <PublicRoute path="/reports" component={ReportPage} breadcrumbs={[{ link: '', name: 'รายงาน' }]} exact={true} />
         <PublicRoute path="/inventories" component={InventoriesList}
           breadcrumbs={[{ link: "/inventories", name: 'สินค้าคงเหลือ' }, { link: '', name: 'รายการ' }]}
@@ -182,6 +184,15 @@ class UsersRoute extends React.Component {
       <PublicRoute path={path + '/add'}
         breadcrumbs={[{ link: path, name: 'จัดการสิทธิ์' }, { link: '/add', name: 'เพิ่ม' }]}
         component={UserAdd} exact={true} />
+    </div>
+    )
+  }
+}
+class PrintsRoute extends React.Component {
+  render() {
+    const path = this.props.match.path;
+    return (<div>
+      <Route component={PrintRequest} />
     </div>
     )
   }

@@ -2,7 +2,6 @@ import db, { auth, googleAuthProvider } from '../firebase/firebase';
 import { history } from '../routers/AppRouter';
 import moment from 'moment';
 
-
 export const startLoginWithGoogle = () => {
     return (dispatch) => {
         return auth.signInWithPopup(googleAuthProvider)
@@ -12,10 +11,11 @@ export const startLoginWithGoogle = () => {
     };
 };
 
-export const startGetUserByEmail = (email) => {
+export const startGetUserByEmail = (user) => {
     return (dispatch) => {
-        return db.collection('users').doc(email).get()
+        return db.collection('users').doc(user.email).get()
             .then(doc => {
+                // console.log(user)
                 let obj = { account: { accountId: '' } };
                 if (doc.exists) {
                     obj = Object.assign(obj, { ...doc.data() })
