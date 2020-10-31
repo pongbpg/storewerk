@@ -1,8 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CompressionPlugin = require('compression-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -19,18 +17,13 @@ if (process.env.NODE_ENV === 'test') {
 
 module.exports = (env) => {
     const isProduction = env === 'production';
-
-    // console.log('env', env, isProduction)
-    const CSSExtract = new ExtractTextPlugin('styles.css');
     return {
         entry: ['babel-polyfill', './src/app.js'],
-        // entry: path.resolve(__dirname, './src/app.js'),
         output: {
-            // path: path.resolve(__dirname, 'public', 'dist'),
             path: path.resolve(__dirname, 'public', 'dist'),
             filename: '[name].[contenthash].js',
             chunkFilename: '[name].bundle.js',
-            // publicPath: '/'
+            publicPath: '/dist'
         },
         module: {
             rules: [
@@ -44,38 +37,10 @@ module.exports = (env) => {
                     exclude: /node_modules/
                 },
                 {
-                    test: /\.s?css$/,
-                    use: CSSExtract.extract({
-                        use: [
-                            {
-                                loader: 'css-loader',
-                                options: {
-                                    sourceMap: true
-                                }
-                            },
-                            {
-                                loader: 'sass-loader',
-                                options: {
-                                    sourceMap: true
-                                }
-                            }
-                        ]
-                    })
-                },
-                {
-                    test: /\.scss$/,
+                    test: /\.css$/,
                     use: [
                         MiniCssExtractPlugin.loader,
-                        {
-                            loader: 'css-loader'
-                        },
-                        {
-                            loader: 'sass-loader',
-                            options: {
-                                sourceMap: true,
-                                // options...
-                            }
-                        }
+                        'css-loader'
                     ]
                 },
                 {
@@ -98,6 +63,7 @@ module.exports = (env) => {
                 template: './public/template.html',
                 filename: '../index.html'
             }),
+            new MiniCssExtractPlugin(),
             new webpack.HashedModuleIdsPlugin(),
             new CompressionPlugin({
                 filename: '[path].gz[query]',
@@ -106,7 +72,6 @@ module.exports = (env) => {
                 threshold: 10240,
                 minRatio: 0.8
             }),
-            CSSExtract,
             new webpack.DefinePlugin({
                 'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
                 'process.env.FIREBASE_AUTH_DOMAIN': JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
@@ -122,7 +87,7 @@ module.exports = (env) => {
                 'process.env.MARIADB_PASSWORD': JSON.stringify(process.env.MARIADB_PASSWORD)
             })
         ],
-        devtool: false,//isProduction ? false : 'inline-source-map',
+        devtool: isProduction ? false : 'inline-source-map',
         devServer: {
             contentBase: path.join(__dirname, 'public'),
             historyApiFallback: true,
