@@ -6,7 +6,6 @@ import { startGetOrders, startDeleteOrder } from '../../actions/orders'
 import ReactTable from 'react-table-v6'
 import { FaSearch } from 'react-icons/fa';
 import NumberFormat from 'react-number-format'
-import jsrsasign from 'jsrsasign';
 import 'react-table-v6/react-table.css'
 import moment from 'moment';
 moment.locale('th');

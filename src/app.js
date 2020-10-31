@@ -5,9 +5,10 @@ import ReactDOM from 'react-dom';
 import { login, startGetUserByEmail, logout } from './actions/auth';
 import AppRouter, { history } from './routers/AppRouter';
 import configureStore from './store/configureStore';
-import './styles/styles.scss';
+// import './styles/styles.scss';
 import './styles/notfound.css';
 import 'bulma/css/bulma.css';
+// require('./mystyles.scss');
 import 'react-datepicker/dist/react-datepicker.css';
 import { auth } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
@@ -28,7 +29,7 @@ const renderApp = () => {
   // }
 };
 
-ReactDOM.render(<LoadingPage />, document.getElementById('app'));
+// ReactDOM.render(<LoadingPage />, document.getElementById('app'));
 
 const logOut = () => {
   store.dispatch(logout());
