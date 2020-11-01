@@ -44,7 +44,7 @@
     "react-number-format": "^4.3.1",
     "react-redux": "5.0.5",
     "react-router-dom": "4.2.2",
-    "react-select": "^3.0.8",
+    "react-select": "3.1.0",
     "react-table-v6": "^6.8.6",
     "react-tooltip": "^4.2.10",
     "read-excel-file": "^2.0.7",

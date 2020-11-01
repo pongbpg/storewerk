@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { Link } from 'react-router-dom';
@@ -213,82 +213,81 @@ export class InStockPage extends React.Component {
                 </nav>
                 <div className="columns">
                     <div className="column is-4">
-                        <div className="card">
-                            <header className="card-header">
-                                <p className="card-header-title">
-                                    ข้อมูลลูกค้า
-                                </p>
-                            </header>
-                            <div className="card-content">
-                                <div className="content">
-                                    <div className="field">
-                                        <label className="label">เบอร์โทร</label>
-                                        <p className={`control has-icons-left is-expanded ${this.state.loadingTel}`}>
-                                            <NumberFormat className="input"
-                                                value={this.state.order.supplierTel}
-                                                allowLeadingZeros={true}
-                                                required
-                                                disabled={this.state.loading != ''}
-                                                onBlur={this.onTelBlur}
-                                                onValueChange={(values) => {
-                                                    const { formattedValue, value, floatValue } = values;
-                                                    this.setState({ order: { ...this.state.order, supplierTel: value } })
-                                                }} />
-                                            <span className="icon is-medium is-left">
-                                                <FaSearch />
-                                            </span>
-                                        </p>
+                        <div className="panel">
+                            <p className="panel-heading">ข้อมูลลูกค้า</p>
+                            <div className="panel-block">
+                                <div className="control">
+                                    <label className="label">เบอร์โทร</label>
+                                    <p className={`control has-icons-left is-expanded ${this.state.loadingTel}`}>
+                                        <NumberFormat className="input"
+                                            value={this.state.order.supplierTel}
+                                            allowLeadingZeros={true}
+                                            required
+                                            disabled={this.state.loading != ''}
+                                            onBlur={this.onTelBlur}
+                                            onValueChange={(values) => {
+                                                const { formattedValue, value, floatValue } = values;
+                                                this.setState({ order: { ...this.state.order, supplierTel: value } })
+                                            }} />
+                                        <span className="icon is-medium is-left">
+                                            <FaSearch />
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="panel-block">
+                                <div className="control">
+                                    <label className="label">Tax ID</label>
+                                    <p className="control is-expanded">
+                                        <NumberFormat className="input"
+                                            value={this.state.order.supplierId}
+                                            isNumericString={true}
+                                            format="#-####-#####-##-#"
+                                            mask="_"
+                                            disabled={this.state.disableMember}
+                                            ref={(input) => { this.taxInput = input; }}
+                                            onValueChange={(values) => {
+                                                const { formattedValue, value, floatValue } = values;
+                                                if (value.length == 13) {
+                                                    this.setState({
+                                                        errors: {
+                                                            ...this.state.errors,
+                                                            supplierId: taxIdValidator(value) ? '' : 'เลขผู้เสียภาษีไม่ถูกต้อง'
+                                                        }
+                                                    });
+                                                } else {
+                                                    this.setState({
+                                                        errors: {
+                                                            ...this.state.errors,
+                                                            supplierId: 'เลขผู้เสียภาษีต้องมี 13 หลัก!'
+                                                        }
+                                                    });
+                                                }
+                                                this.setState({ order: { ...this.state.order, supplierId: value } })
+                                            }} />
+                                    </p>
+                                    <p className="help has-text-danger">{this.state.errors.supplierId}</p>
+                                </div>
+                            </div>
+                            <div className="panel-block">
+                                <div className="control">
+                                    <label className="label">ชื่อ</label>
+                                    <p className="control is-expanded">
+                                        <input className="input" type="text" name="supplierName"
+                                            disabled={this.state.disableMember}
+                                            value={this.state.order.supplierName} onChange={this.onInputChange} required />
 
-                                    </div>
-                                    <div className="field">
-                                        <label className="label">Tax ID</label>
-                                        <p className="control is-expanded">
-                                            <NumberFormat className="input"
-                                                value={this.state.order.supplierId}
-                                                isNumericString={true}
-                                                format="#-####-#####-##-#"
-                                                mask="_"
-                                                disabled={this.state.disableMember}
-                                                ref={(input) => { this.taxInput = input; }}
-                                                onValueChange={(values) => {
-                                                    const { formattedValue, value, floatValue } = values;
-                                                    if (value.length == 13) {
-                                                        this.setState({
-                                                            errors: {
-                                                                ...this.state.errors,
-                                                                supplierId: taxIdValidator(value) ? '' : 'เลขผู้เสียภาษีไม่ถูกต้อง'
-                                                            }
-                                                        });
-                                                    } else {
-                                                        this.setState({
-                                                            errors: {
-                                                                ...this.state.errors,
-                                                                supplierId: 'เลขผู้เสียภาษีต้องมี 13 หลัก!'
-                                                            }
-                                                        });
-                                                    }
-                                                    this.setState({ order: { ...this.state.order, supplierId: value } })
-                                                }} />
-                                        </p>
-                                        <p className="help has-text-danger">{this.state.errors.supplierId}</p>
-                                    </div>
-                                    <div className="field">
-                                        <label className="label">ชื่อ</label>
-                                        <p className="control is-expanded">
-                                            <input className="input" type="text" name="supplierName"
-                                                disabled={this.state.disableMember}
-                                                value={this.state.order.supplierName} onChange={this.onInputChange} required />
-
-                                        </p>
-                                    </div>
-                                    <div className="field">
-                                        <label className="label">ที่อยู่</label>
-                                        <div className="control">
-                                            <textarea className="textarea" name="supplierAddr"
-                                                disabled={this.state.disableMember}
-                                                value={this.state.order.supplierAddr} onChange={this.onInputChange} required
-                                            ></textarea>
-                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="panel-block">
+                                <div className="control">
+                                    <label className="label">ที่อยู่</label>
+                                    <div className="control">
+                                        <textarea className="textarea" name="supplierAddr"
+                                            disabled={this.state.disableMember} style={{ height: '220px' }}
+                                            value={this.state.order.supplierAddr} onChange={this.onInputChange} required
+                                        ></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -297,69 +296,48 @@ export class InStockPage extends React.Component {
                     <div className="column is-8">
                         <div className="columns">
                             <div className="column is-4">
-                                <div className="card">
-                                    <header className="card-header">
-                                        <p className="card-header-title">
-                                            คลังสินค้า
-                                </p>
-                                    </header>
-                                    <div className="card-content">
-                                        <div className="content">
-                                            <div className="control has-icons-left">
-                                                <Select
-                                                    onChange={this.onSelectWarehouseChange}
-                                                    options={this.state.warehouses}
-                                                    getOptionValue={(option => option.warehouseId)}
-                                                    getOptionLabel={(option => option.warehouseName)}
-                                                />
-                                            </div>
+                                <div className="panel">
+                                    <p className="panel-heading">คลังสินค้า</p>
+                                    <div className="panel-block">
+                                        <div className="control has-icons-left">
+                                            <Select
+                                                onChange={this.onSelectWarehouseChange}
+                                                options={this.state.warehouses}
+                                                getOptionValue={(option => option.warehouseId)}
+                                                getOptionLabel={(option => option.warehouseName)}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="column is-8">
-                                <div className="card">
-                                    <header className="card-header">
-                                        <p className="card-header-title">
-                                            สินค้า
-                                        </p>
-                                    </header>
-                                    <div className="card-content">
-                                        <div className="content">
-                                            <div className="control has-icons-left">
-                                                <Select
-                                                    isMulti
-                                                    onChange={this.onSelectProductChange}
-                                                    options={this.state.products.map(p => {
-                                                        return {
-                                                            ..._.omit(p, 'created', 'updated', 'creator', 'updater'),
-                                                            quantity: 0,
-                                                            unitPrice: 0,
-                                                            totalPrice: 0
-                                                        }
-                                                    })}
-                                                    getOptionValue={(option => option.productId)}
-                                                    getOptionLabel={(option => option.productName + ' (' + option.categoryId + '/' + option.productId + ')')}
-                                                />
-                                            </div>
+                                <div className="panel">
+                                    <p className="panel-heading">สินค้า</p>
+                                    <div className="panel-block">
+                                        <div className="control has-icons-left">
+                                            <Select
+                                                isMulti
+                                                onChange={this.onSelectProductChange}
+                                                options={this.state.products.map(p => {
+                                                    return {
+                                                        ..._.omit(p, 'created', 'updated', 'creator', 'updater'),
+                                                        quantity: 0,
+                                                        unitPrice: 0,
+                                                        totalPrice: 0
+                                                    }
+                                                })}
+                                                getOptionValue={(option => option.productId)}
+                                                getOptionLabel={(option => option.productName + ' (' + option.categoryId + '/' + option.productId + ')')}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="card">
-                            <header className="card-header">
-                                <p className="card-header-title">
-                                    รายการสินค้า
-                                </p>
-                                {/* <a href="#" className="card-header-icon" aria-label="more options">
-                                    <span className="icon">
-                                        <i className="fa fa-angle-down" aria-hidden="true"></i>
-                                    </span>
-                                </a> */}
-                            </header>
-                            <div className="card-content">
-                                <div className="content">
+                        <div className="panel">
+                            <p className="panel-heading">รายการสินค้า</p>
+                            <div className="panel-block">
+                                <div className="control">
                                     <table className="table">
                                         <thead>
                                             <tr>
@@ -368,7 +346,6 @@ export class InStockPage extends React.Component {
                                                 <td className="has-text-right">จำนวน</td>
                                                 <td className="has-text-right">ราคาต่อหน่วย</td>
                                                 <td className="has-text-right">รวม</td>
-                                                {/* <td></td> */}
                                             </tr>
                                         </thead>
                                         {this.state.orderDetail != null && <tbody>
@@ -558,32 +535,31 @@ export class InStockPage extends React.Component {
                                         </tbody>
                                         }
                                     </table>
-                                    <div className="level">
-                                        <div className="level-item">
-                                            <div className="field is-grouped">
-                                                <div className="control">
-                                                    <button className={`button is-link ${this.state.loading}`}
-                                                        disabled={
-                                                            this.state.order.supplierTel == '' ||
-                                                            this.state.order.supplierName == '' ||
-                                                            this.state.order.supplierAddr == '' ||
-                                                            this.state.order.warehouseId == '' ||
-                                                            this.state.orderDetail.length == 0
-                                                        }
-                                                        onClick={this.onOrderSave}
-                                                    >บันทึก</button>
-                                                </div>
-                                                <div className="control">
-                                                    <Link className="button" to="/orders">ยกเลิก</Link>
-                                                </div>
-                                            </div>
-                                        </div>
+                                </div>
+                            </div>
+                            <div className="panel-tabs" style={{padding:'20px'}}>
+                                <div className="field is-grouped">
+                                    <div className="control">
+                                        <button className={`button is-link ${this.state.loading}`}
+                                            disabled={
+                                                this.state.order.supplierTel == '' ||
+                                                this.state.order.supplierName == '' ||
+                                                this.state.order.supplierAddr == '' ||
+                                                this.state.order.warehouseId == '' ||
+                                                this.state.orderDetail.length == 0
+                                            }
+                                            onClick={this.onOrderSave}
+                                        >บันทึก</button>
+                                    </div>
+                                    <div className="control">
+                                        <Link className="button" to="/orders">ยกเลิก</Link>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 {this.state.suppliers.length > 0 && <div className="modal is-active">
                     <div className="modal-background"></div>
                     <div className="modal-card">
@@ -634,9 +610,7 @@ export class InStockPage extends React.Component {
                     </div>
                 </div>
                 }
-
-
-            </div>
+            </div >
         );
     }
 }

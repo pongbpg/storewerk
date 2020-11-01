@@ -6,7 +6,7 @@ import AppRouter, { history } from './routers/AppRouter';
 import configureStore from './store/configureStore';
 import { auth } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
-
+import "react-datepicker/dist/react-datepicker.css";
 const store = configureStore();
 
 const jsx = (

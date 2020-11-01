@@ -164,11 +164,11 @@ class OrdersRoute extends React.Component {
       <PublicRoute path={path}
         breadcrumbs={[{ link: path, name: 'ออเดอร์' }, { link: '', name: 'รายการ' }]}
         component={OrderList} exact={true} />
-      <PublicRoute path={path + '/in/stock'}
-        breadcrumbs={[{ link: path, name: 'ออเดอร์' }, { link: '/in/stock', name: 'นำเข้า' }]}
+      <PublicRoute path={path + '/in'}
+        breadcrumbs={[{ link: path, name: 'ออเดอร์' }, { link: '/in', name: 'สั่งซื้อ' }]}
         component={OrderInStock} />
-      <PublicRoute path={path + '/out/stock'}
-        breadcrumbs={[{ link: path, name: 'ออเดอร์' }, { link: '/out/stock', name: 'จ่ายออก' }]}
+      <PublicRoute path={path + '/out'}
+        breadcrumbs={[{ link: path, name: 'ออเดอร์' }, { link: '/out', name: 'จำหน่าย' }]}
         component={OrderOutStock} />
     </div>
     )

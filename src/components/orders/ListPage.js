@@ -161,12 +161,12 @@ export class ListPage extends React.Component {
                             <div className="control">
                                 {/* {props.original.isStatus == 'SALE' && */}
                                 {/* <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
-                              
+                               */}
                                 <a className="button is-small"
                                     href={`http://rpt.storewerk.me/invoice?orderId=${props.original.orderId}`} target="_blank">
                                     ใบกำกับภาษี
-                                </a> */}
-                                {/* <Link className="button is-small" to={`/orders/out/stock/edit/${props.original.orderId}`}>แก้ไข</Link> */}
+                                </a>
+                                {/* <Link className="button is-small" to={`/orders/out/edit/${props.original.orderId}`}>แก้ไข</Link> */}
                             </div>
                         </div >
                     )
@@ -180,10 +180,10 @@ export class ListPage extends React.Component {
                 <nav className="level">
                     <div className="level-left">
                         <div className="level-item">
-                            <Link className="button is-link is-rounded is-hovered" to="/orders/in/stock">สั่งซื้อ</Link>
+                            <Link className="button is-link is-rounded is-hovered" to="/orders/in">สั่งซื้อ</Link>
                         </div>
                         <div className="level-item">
-                            <Link className="button is-warning is-rounded is-hovered" to="/orders/out/stock">จำหน่าย</Link>
+                            <Link className="button is-warning is-rounded is-hovered" to="/orders/out">จำหน่าย</Link>
                         </div>
 
                     </div>

@@ -21,8 +21,8 @@ module.exports = (env) => {
         entry: ['babel-polyfill', './src/app.js'],
         output: {
             path: path.resolve(__dirname, 'public', 'dist'),
-            filename: '[name].[contenthash].js',
-            chunkFilename: '[name].bundle.js',
+            filename: '[name].[hash].js',
+            chunkFilename: '[contenthash].[hash]-bundle.js',
             publicPath: '/dist'
         },
         module: {
@@ -63,7 +63,9 @@ module.exports = (env) => {
                 template: './public/template.html',
                 filename: '../index.html'
             }),
-            new MiniCssExtractPlugin(),
+            new MiniCssExtractPlugin({
+                filename: "[contenthash].css",
+            }),
             new webpack.HashedModuleIdsPlugin(),
             new CompressionPlugin({
                 filename: '[path].gz[query]',
@@ -87,7 +89,7 @@ module.exports = (env) => {
                 'process.env.MARIADB_PASSWORD': JSON.stringify(process.env.MARIADB_PASSWORD)
             })
         ],
-        devtool: isProduction ? false : 'inline-source-map',
+        devtool: false,//isProduction ? false : 'inline-source-map',
         devServer: {
             contentBase: path.join(__dirname, 'public'),
             historyApiFallback: true,
@@ -104,20 +106,20 @@ module.exports = (env) => {
             splitChunks: {
                 chunks: 'all',
                 minSize: 10000,
-                maxSize: 250000,
-                cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name(module) {
-                            // get the name. E.g. node_modules/packageName/not/this/part.js
-                            // or node_modules/packageName
-                            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                maxSize: 25000,
+                // cacheGroups: {
+                //     vendor: {
+                //         test: /[\\/]node_modules[\\/]/,
+                //         name(module) {
+                //             // get the name. E.g. node_modules/packageName/not/this/part.js
+                //             // or node_modules/packageName
+                //             const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
 
-                            // npm package names are URL-safe, but some servers don't like @ symbols
-                            return `npm.${packageName.replace('@', '')}`;
-                        },
-                    },
-                },
+                //             // npm package names are URL-safe, but some servers don't like @ symbols
+                //             return `npm.${packageName.replace('@', '')}`;
+                //         },
+                //     },
+                // },
             },
             minimize: true,
             minimizer: [new TerserPlugin()],
