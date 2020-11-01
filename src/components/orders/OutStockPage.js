@@ -286,14 +286,10 @@ export class OutStockPage extends React.Component {
                 </nav>
                 <div className="columns">
                     <div className="column is-4">
-                        <div className="card">
-                            <header className="card-header">
-                                <p className="card-header-title">
-                                    ข้อมูลผู้ขาย
-                                </p>
-                            </header>
-                            <div className="card-content">
-                                <div className="content">
+                        <div className="panel">
+                            <p className="panel-heading">ข้อมูลผู้ขาย</p>
+                            <div className="panel-block">
+                                <div className="control">
                                     <div className="field">
                                         <label className="label">เบอร์โทร</label>
                                         <p className={`control has-icons-left is-expanded ${this.state.loadingTel}`}>
@@ -311,8 +307,11 @@ export class OutStockPage extends React.Component {
                                                 <FaSearch />
                                             </span>
                                         </p>
-
                                     </div>
+                                </div>
+                            </div>
+                            <div className="panel-block">
+                                <div className="control">
                                     <div className="field">
                                         <label className="label">Tax ID</label>
                                         <p className="control is-expanded">
@@ -345,6 +344,10 @@ export class OutStockPage extends React.Component {
                                         </p>
                                         <p className="help has-text-danger">{this.state.errors.customerId}</p>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="panel-block">
+                                <div className="control">
                                     <div className="field">
                                         <label className="label">ชื่อ</label>
                                         <p className="control is-expanded">
@@ -354,10 +357,14 @@ export class OutStockPage extends React.Component {
 
                                         </p>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="panel-block">
+                                <div className="control">
                                     <div className="field">
                                         <label className="label">ที่อยู่</label>
                                         <div className="control">
-                                            <textarea className="textarea" name="customerAddr"
+                                            <textarea className="textarea" name="customerAddr" style={{ height: '220px' }}
                                                 disabled={this.state.disableMember}
                                                 value={this.state.order.customerAddr} onChange={this.onInputChange} required
                                             ></textarea>
@@ -371,13 +378,10 @@ export class OutStockPage extends React.Component {
                     <div className="column is-8">
                         <div className="columns">
                             <div className="column is-4">
-                                <div className="card">
-                                    <header className="card-header">
-                                        <p className="card-header-title">
-                                            คลังสินค้า
-                                </p>
+                                <div className="panel">
+                                    <p className="panel-heading">คลังสินค้า</p>
 
-                                        <a href="#" className="card-header-icon" aria-label="more options"
+                                    {/* <a href="#" className="card-header-icon" aria-label="more options"
                                             onClick={() => this.props.startGetInventories(
                                                 this.state.auth.account.accountId,
                                                 moment(this.state.order.orderDate).format('YYYY-MM-DD'))
@@ -385,63 +389,50 @@ export class OutStockPage extends React.Component {
                                             <span className="icon">
                                                 <TiRefresh aria-hidden="true" />
                                             </span>
-                                        </a>
-                                    </header>
-                                    <div className="card-content">
-                                        <div className="content">
-                                            <div className="control has-icons-left">
-                                                <Select
-                                                    onChange={this.onSelectWarehouseChange}
-                                                    options={this.state.warehouses}
-                                                    getOptionValue={(option => option.warehouseId)}
-                                                    getOptionLabel={(option => option.warehouseName)}
-                                                />
-                                            </div>
+                                        </a> */}
+                                    <div className="panel-block">
+                                        <div className="control has-icons-left">
+                                            <Select
+                                                onChange={this.onSelectWarehouseChange}
+                                                options={this.state.warehouses}
+                                                getOptionValue={(option => option.warehouseId)}
+                                                getOptionLabel={(option => option.warehouseName)}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="column is-8">
-                                <div className="card">
-                                    <header className="card-header">
-                                        <p className="card-header-title">
-                                            สินค้า
-                                        </p>
-                                    </header>
-                                    <div className="card-content">
-                                        <div className="content">
-                                            <div className="control has-icons-left">
-                                                <Select
-                                                    isMulti
-                                                    value={this.state.orderDetail}
-                                                    onChange={this.onSelectProductChange}
-                                                    options={this.state.products.map(p => {
-                                                        // console.log(p)
-                                                        return {
-                                                            ..._.omit(p, 'warehouseId', 'warehouseName', 'created', 'updated', 'creator', 'updater'),
-                                                            quantity: 0,
-                                                            unitPrice: 0,
-                                                            totalPrice: 0
-                                                        }
-                                                    })}
-                                                    getOptionValue={(option => option.productId)}
-                                                    getOptionLabel={(option => option.productName + ' (' + option.productId + ')')}
-                                                />
-                                            </div>
+                                <div className="panel">
+                                    <p className="panel-heading">สินค้า</p>
+                                    <div className="panel-block">
+                                        <div className="control has-icons-left">
+                                            <Select
+                                                isMulti
+                                                value={this.state.orderDetail}
+                                                onChange={this.onSelectProductChange}
+                                                options={this.state.products.map(p => {
+                                                    // console.log(p)
+                                                    return {
+                                                        ..._.omit(p, 'warehouseId', 'warehouseName', 'created', 'updated', 'creator', 'updater'),
+                                                        quantity: 0,
+                                                        unitPrice: 0,
+                                                        totalPrice: 0
+                                                    }
+                                                })}
+                                                getOptionValue={(option => option.productId)}
+                                                getOptionLabel={(option => option.productName + ' (' + option.productId + ')')}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="card">
-                            <header className="card-header">
-                                <p className="card-header-title">
-                                    รายการสินค้า
-                                </p>
-                            </header>
-                            <div className="card-content">
-                                <div className="content">
-                                    <table className="table">
+                        <div className="panel">
+                            <p className="panel-heading">รายการสินค้า</p>
+                            <div className="panel-block">
+                                <div className="control">
+                                    <table className="table is-fullwidth">
                                         <thead>
                                             <tr>
                                                 <td>#</td>
@@ -642,29 +633,27 @@ export class OutStockPage extends React.Component {
                                         </tbody>
                                         }
                                     </table>
-                                    <div className="level">
-                                        <div className="level-item">
-                                            <div className="field is-grouped">
-                                                <div className="control">
-                                                    <button className={`button is-link ${this.state.loading}`}
-                                                        disabled={
-                                                            this.state.order.customerTel == '' ||
-                                                            this.state.order.customerName == '' ||
-                                                            this.state.order.customerAddr == '' ||
-                                                            this.state.order.warehouseId == '' ||
-                                                            this.state.orderDetail == null
-                                                        }
-                                                        onClick={this.onOrderSave}
-                                                    >บันทึก</button>
-                                                </div>
-                                                <div className="control">
-                                                    <Link className="button" to="/orders">ยกเลิก</Link>
-                                                </div>
-                                            </div>
-                                            <p className="help has-text-danger">{this.state.errors.submit}</p>
-                                        </div>
+                                </div>
+                            </div>
+                            <div className="panel-tabs" style={{ padding: '20px' }}>
+                                <div className="field is-grouped">
+                                    <div className="control">
+                                        <button className={`button is-link ${this.state.loading}`}
+                                            disabled={
+                                                this.state.order.customerTel == '' ||
+                                                this.state.order.customerName == '' ||
+                                                this.state.order.customerAddr == '' ||
+                                                this.state.order.warehouseId == '' ||
+                                                this.state.orderDetail == null
+                                            }
+                                            onClick={this.onOrderSave}
+                                        >บันทึก</button>
+                                    </div>
+                                    <div className="control">
+                                        <Link className="button" to="/orders">ยกเลิก</Link>
                                     </div>
                                 </div>
+                                <p className="help has-text-danger">{this.state.errors.submit}</p>
                             </div>
                         </div>
                     </div>
@@ -720,8 +709,6 @@ export class OutStockPage extends React.Component {
                         </div>
                     </div>
                 }
-
-
             </div >
         );
     }

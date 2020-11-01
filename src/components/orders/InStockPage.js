@@ -317,6 +317,7 @@ export class InStockPage extends React.Component {
                                         <div className="control has-icons-left">
                                             <Select
                                                 isMulti
+                                                value={this.state.orderDetail}
                                                 onChange={this.onSelectProductChange}
                                                 options={this.state.products.map(p => {
                                                     return {
@@ -338,7 +339,7 @@ export class InStockPage extends React.Component {
                             <p className="panel-heading">รายการสินค้า</p>
                             <div className="panel-block">
                                 <div className="control">
-                                    <table className="table">
+                                    <table className="table is-fullwidth">
                                         <thead>
                                             <tr>
                                                 <td>#</td>
