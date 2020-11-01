@@ -10,13 +10,14 @@ import _ from 'underscore';
 export class EditPage extends React.Component {
     constructor(props) {
         super(props);
+        const product = props.products.find(f => f.productId == props.match.params.pid && f.categoryId == props.match.params.cid);
         this.state = {
             auth: props.auth,
-            product: props.products.find(f => f.productId == props.match.params.code) ||
+            product: product ||
                 { categoryId: '', categoryName: '', productId: '', productName: '', unitName: '', productPrice: 0, productCost: 0, productImg: null },
             productImg: {
                 file: null,
-                preview: null
+                preview: product ? product.productImg : null
             },
             categories: props.categories || [],
             errors: '',

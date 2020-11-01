@@ -101,7 +101,7 @@ export class ListPage extends React.Component {
                     return (
                         <div className="field is-grouped is-grouped-centered">
                             <div className="control">
-                                <Link className="button is-small" to={`/products/edit/${props.original.productId}`}>แก้ไข</Link>
+                                <Link className="button is-small" to={`/products/edit/${props.original.categoryId}/${props.original.productId}`}>แก้ไข</Link>
                             </div>
                             {/* <div className="control">
                                 <button className="button is-small is-danger" onClick={(e) => this.onRemoveClick(props.original.productId, e)}>ลบ</button>

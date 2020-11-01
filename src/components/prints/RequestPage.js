@@ -13,6 +13,16 @@ export class ListPage extends React.Component {
             query: props.location.search,
             // queryString: querySting.parse(atob(props.location.search.substring(1)))
         }
+        if (props.location.search) {
+            console.log('xxx')
+            let obj = querySting.parse(atob(props.location.search.substring(1)));
+            if(obj.id){
+                let ids = obj.id.split(',')
+                console.log(ids)
+            }
+            // const obj = querySting.parse(atob(props.location.search.substring(1)))
+            // alert(obj)
+        }
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.auth != this.state.auth) {
@@ -21,8 +31,7 @@ export class ListPage extends React.Component {
     }
 
     render() {
-        const obj = querySting.parse(atob(this.state.query.substring(1)))
-        console.log(obj)
+        // const obj = querySting.parse(atob(this.state.query.substring(1)))
         return (
             <div className="box">
                 {atob(this.state.query.substring(1))}

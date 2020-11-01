@@ -74,7 +74,7 @@ class ProductsRoute extends React.Component {
       <PublicRoute path={path + '/add'}
         breadcrumbs={[{ link: path, name: 'สินค้า' }, { link: '/add', name: 'เพิ่ม' }]}
         component={ProductAdd} exact={true} />
-      <PublicRoute path={path + '/edit/:code'}
+      <PublicRoute path={path + '/edit/:cid/:pid'}
         breadcrumbs={[{ link: path, name: 'สินค้า' }, { link: '/edit', name: 'แก้ไข' }]}
         component={ProductEdit} exact={true} />
       <PublicRoute path={path + '/categories'}
