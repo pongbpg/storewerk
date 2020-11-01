@@ -163,7 +163,7 @@ export class ListPage extends React.Component {
                                 {/* <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
                                */}
                                 <a className="button is-small"
-                                    href={`http://rpt.storewerk.me/invoice?orderId=${props.original.orderId}`} target="_blank">
+                                    href={`http://rpt.storewerk.me/invoice?o=${btoa(props.original.orderId)}`} target="_blank">
                                     ใบกำกับภาษี
                                 </a>
                                 {/* <Link className="button is-small" to={`/orders/out/edit/${props.original.orderId}`}>แก้ไข</Link> */}
