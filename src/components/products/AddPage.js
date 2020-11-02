@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { history } from '../../routers/AppRouter';
 import { FaFileImage } from 'react-icons/fa'
 import NumberFormat from 'react-number-format';
+import Resizer from 'react-image-file-resizer';
 import _ from 'underscore';
 export class AddPage extends React.Component {
     constructor(props) {
@@ -85,7 +86,21 @@ export class AddPage extends React.Component {
             });
         }
         if (file.length > 0) {
-            reader.readAsDataURL(event.target.files[0]);
+            Resizer.imageFileResizer(
+                file[0],
+                300,
+                300,
+                'JPEG',
+                100,
+                0,
+                uri => {
+                    reader.readAsDataURL(uri);
+                },
+                'blob',
+                100,
+                100,
+            );
+
         }
     }
     onSubmit = (e) => {
@@ -131,7 +146,7 @@ export class AddPage extends React.Component {
                         <div className="control">
                             <div className="select is-fullwidth">
                                 <select value={this.state.product.categoryId} onChange={this.onCategoryChange}>
-                                    <option value="">ไม่มี</option>
+                                    <option value="NULL">ไม่มี</option>
                                     {this.state.categories.map(cat => {
                                         // console.log(cat)
                                         return (
@@ -162,7 +177,7 @@ export class AddPage extends React.Component {
                         </div>
                     </div>
                     <div className="field" style={{ paddingTop: '20px' }}>
-                            <label className="label">ภาพสินค้า</label>
+                        <label className="label">ภาพสินค้า</label>
                         <div className="field-body">
                             <div className="field is-grouped">
                                 <div className="control">

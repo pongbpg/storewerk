@@ -51,7 +51,7 @@ exports.create = (req, res) => {
     // })
 }
 exports.update = (req, res) => {
-    const keys = Object.keys(_.omit(req.body, 'productId', 'accountId'));
+    const keys = Object.keys(_.omit(req.body,'accountId'));
     let val = [];
     const sql = `update products
     set ${keys.map(k => {
@@ -63,6 +63,7 @@ exports.update = (req, res) => {
     val.push(req.body.accountId)
     val.push(req.body.productId)
     val.push(req.body.categoryId)
+    // res.json({ sql, val })
     req._sql.query(sql, val)
         .then(row => {
             res.json({
@@ -75,7 +76,7 @@ exports.update = (req, res) => {
             console.log(err);
             res.json({
                 updated: false,
-                msg: err.code
+                msg: JSON.stringify(err)
             })
         })
 }

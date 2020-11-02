@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FaFileImage } from 'react-icons/fa'
 import { history } from '../../routers/AppRouter';
 import NumberFormat from 'react-number-format'
+import Resizer from 'react-image-file-resizer';
 import _ from 'underscore';
 export class EditPage extends React.Component {
     constructor(props) {
@@ -65,13 +66,15 @@ export class EditPage extends React.Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        console.log(this.state.product)
+        // console.log(this.state.product)
         this.setState({ loading: 'is-loading' })
-        this.props.startUpdateProduct({
+        const obj = {
             ..._.pick(this.state.product, 'accountId', 'categoryId', 'productId', 'productName', 'unitName', 'productPrice', 'productCost'),
             productImg: this.state.productImg.preview,
             updater: this.state.auth.email
-        })
+        }
+        console.log(obj)
+        this.props.startUpdateProduct(obj)
             .then(res => {
                 this.setState({
                     loading: ''
@@ -103,7 +106,21 @@ export class EditPage extends React.Component {
             });
         }
         if (file.length > 0) {
-            reader.readAsDataURL(event.target.files[0]);
+            Resizer.imageFileResizer(
+                file[0],
+                300,
+                300,
+                'JPEG',
+                100,
+                0,
+                uri => {
+                    reader.readAsDataURL(uri);
+                },
+                'blob',
+                100,
+                100,
+            );
+
         }
     }
 
@@ -118,8 +135,8 @@ export class EditPage extends React.Component {
                         <label className="label">ประเภทสินค้า</label>
                         <div className="control">
                             <div className="select">
-                                <select value={this.state.product.categoryId} onChange={this.onCategoryChange}>
-                                    <option value="" >ไม่มี</option>
+                                <select value={this.state.product.categoryId} onChange={this.onCategoryChange} disabled>
+                                    <option value="NULL" >ไม่มี</option>
                                     {this.state.categories.map(cat => {
                                         return (
                                             <option key={cat.categoryId} value={cat.categoryId}>{cat.categoryName}</option>
