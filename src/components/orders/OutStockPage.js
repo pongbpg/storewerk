@@ -414,7 +414,7 @@ export class OutStockPage extends React.Component {
                                                 options={this.state.products.map(p => {
                                                     // console.log(p)
                                                     return {
-                                                        ..._.omit(p, 'warehouseId', 'warehouseName', 'created', 'updated', 'creator', 'updater'),
+                                                        ..._.omit(p, 'productImg', 'warehouseId', 'warehouseName', 'created', 'updated', 'creator', 'updater'),
                                                         quantity: 0,
                                                         unitPrice: 0,
                                                         totalPrice: 0
