@@ -16,13 +16,8 @@ export class ListPage extends React.Component {
             search: '',
             orderDate: moment(),
             inventories: props.inventories,
-            warehouses: _.chain(props.inventories)
-                .groupBy('warehouseName')
-                .map((wh, id) => {
-                    return {
-                        id
-                    }
-                }).value()
+            warehouses: [],
+            categories: [],
         }
         if (props.auth.account.accountId == '') {
             alert('คุณยังไม่ได้เลือกบัญชี!!')
@@ -44,7 +39,14 @@ export class ListPage extends React.Component {
                         return {
                             id
                         }
-                    }).value()
+                    }).value(),
+                categories: _.chain(nextProps.inventories)
+                    .groupBy('categoryName')
+                    .map((ct, id) => {
+                        return {
+                            id
+                        }
+                    }).value(),
             });
         }
     }
@@ -88,8 +90,25 @@ export class ListPage extends React.Component {
                 className: 'has-text-left',
                 accessor: 'categoryName',
                 filterMethod: (filter, row) => {
-                    return row[filter.id].toLowerCase().includes(filter.value.toLowerCase())
-                }
+                    if (filter.value === "all") {
+                        return true;
+                    } else {
+                        return row[filter.id] == filter.value;
+                    }
+                },
+                Filter: ({ filter, onChange }) =>
+                    <select className="control"
+                        onChange={event => onChange(event.target.value)}
+                        style={{ width: "100%" }}
+                        value={filter ? filter.value : "all"}>
+                        <option value="all">ทั้งหมด</option>
+                        {this.state.categories.map((ct) => {
+                            return (<option key={ct.id}>{ct.id}</option>)
+                        })}
+                    </select>
+                // filterMethod: (filter, row) => {
+                //     return row[filter.id].toLowerCase().includes(filter.value.toLowerCase())
+                // }
             },
             {
                 Header: 'สินค้า',

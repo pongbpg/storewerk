@@ -321,7 +321,7 @@ export class InStockPage extends React.Component {
                                                 onChange={this.onSelectProductChange}
                                                 options={this.state.products.map(p => {
                                                     return {
-                                                        ..._.omit(p, 'created', 'updated', 'creator', 'updater'),
+                                                        ..._.omit(p, 'productImg', 'created', 'updated', 'creator', 'updater'),
                                                         quantity: 0,
                                                         unitPrice: 0,
                                                         totalPrice: 0
@@ -538,7 +538,7 @@ export class InStockPage extends React.Component {
                                     </table>
                                 </div>
                             </div>
-                            <div className="panel-tabs" style={{padding:'20px'}}>
+                            <div className="panel-tabs" style={{ padding: '20px' }}>
                                 <div className="field is-grouped">
                                     <div className="control">
                                         <button className={`button is-link ${this.state.loading}`}

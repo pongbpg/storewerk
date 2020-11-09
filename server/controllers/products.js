@@ -1,6 +1,6 @@
 const _ = require('underscore');
 exports.getById = (req, res) => {
-    const sql = `select ap.* ,IFNULL(ac.categoryName,"") as categoryName
+    const sql = `select ap.* ,IFNULL(ac.categoryName,"ไม่มี") as categoryName
     from products ap
     left join categories ac on ac.accountId = ap.accountId and ac.categoryId = ap.categoryId
     where ap.productId = ? and ap.accountId =? 
@@ -13,7 +13,7 @@ exports.getById = (req, res) => {
         })
 }
 exports.getByAccountId = (req, res) => {
-    const sql = `select ap.* ,IFNULL(ac.categoryName,"") as categoryName
+    const sql = `select ap.* ,IFNULL(ac.categoryName,"ไม่มี") as categoryName
     from products ap
     left join categories ac on ac.accountId = ap.accountId and ac.categoryId = ap.categoryId
     where ap.accountId=?  order by categoryId,productId`

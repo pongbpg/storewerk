@@ -160,8 +160,8 @@ export class ListPage extends React.Component {
                         <div className="field is-grouped-centered">
                             <div className="control">
                                 {/* {props.original.isStatus == 'SALE' && */}
-                                {/* <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
-                               */}
+                                <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
+
                                 <a className="button is-small"
                                     href={`http://rpt.storewerk.me/invoice?o=${btoa(props.original.orderId)}`} target="_blank">
                                     ใบกำกับภาษี

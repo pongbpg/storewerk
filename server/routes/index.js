@@ -10,6 +10,7 @@ const inventories = require('./inventories');
 const users = require('./users');
 const dashboard = require('./dashboard');
 const prints = require('./prints');
+const permissions = require('./permissions');
 
 router.use('/accounts', accounts)
 router.use('/categories', categories)
@@ -22,6 +23,7 @@ router.use('/inventories', inventories)
 router.use('/users', users)
 router.use('/dashboard', dashboard)
 router.use('/prints', prints)
+router.use('/permissions', permissions)
 
 
 module.exports = router

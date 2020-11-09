@@ -117,8 +117,8 @@ export class EditPage extends React.Component {
                     reader.readAsDataURL(uri);
                 },
                 'blob',
-                100,
-                100,
+                300,
+                300,
             );
 
         }
