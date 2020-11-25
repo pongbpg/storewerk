@@ -78,12 +78,12 @@ export class ListPage extends React.Component {
                 maxWidth: 80
             },
             {
-                Header: 'วันที่ทำรายการ',
+                Header: 'เลขที่',
                 headerClassName: 'has-text-centered',
                 className: 'has-text-centered',
-                accessor: 'created',
+                accessor: 'orderNo',
                 maxWidth: 140,
-                Cell: props => moment(props.value).format('D/M/YY H:mm:ss')
+                // Cell: props => moment(props.value).format('D/M/YY H:mm:ss')
             },
             {
                 Header: 'ชื่อ',

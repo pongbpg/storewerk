@@ -89,7 +89,7 @@ module.exports = (env) => {
                 'process.env.MARIADB_PASSWORD': JSON.stringify(process.env.MARIADB_PASSWORD)
             })
         ],
-        devtool: false,//isProduction ? false : 'inline-source-map',
+        devtool: isProduction ? false : 'eval-cheap-source-map',
         devServer: {
             contentBase: path.join(__dirname, 'public'),
             historyApiFallback: true,
