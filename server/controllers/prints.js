@@ -5,7 +5,7 @@ exports.request = (req, res) => {
     ,p.productId ,od.productName ,p.productImg ,od.quantity ,od.unitName ,o2.created ,o2.creator 
     from orders_detail od 
     inner join orders o2 on o2.orderId =od.orderId and o2.accountId = ?
-    left join products p on od.productId = p.productId  and od.categoryId =p.categoryId
+    left join products p on od.productId = p.productId  and od.categoryId =p.categoryId and p.accountId = od.accountId
     left join categories c on c.categoryId = p.categoryId and c.accountId = p.accountId
     where od.orderId in ?
     order by o2.orderDate
