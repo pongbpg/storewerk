@@ -179,7 +179,7 @@ export class ListPage extends React.Component {
             <div className="box">
                 <nav className="level">
                     <div className="level-left">
-                        {this.state.auth.role != 'ADMIN' &&
+                        {this.state.auth.role != 'SALE' &&
                             <div className="level-item">
                                 <Link className="button is-link is-rounded is-hovered" to="/orders/in">สั่งซื้อ</Link>
                             </div>
