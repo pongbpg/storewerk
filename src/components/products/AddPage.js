@@ -56,7 +56,7 @@ export class AddPage extends React.Component {
 
     onCategoryChange = (e) => {
         // let category = this.state.categories.find(f => f.categoryId == e.target.value);
-
+        // const products = this.state.products
         this.setState({
             product: {
                 ...this.state.product,

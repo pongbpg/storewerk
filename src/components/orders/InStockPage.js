@@ -327,7 +327,7 @@ export class InStockPage extends React.Component {
                                                         totalPrice: 0
                                                     }
                                                 })}
-                                                getOptionValue={(option => option.productId)}
+                                                getOptionValue={(option => option.categoryId + option.productId)}
                                                 getOptionLabel={(option => option.productName + ' (' + option.categoryId + '/' + option.productId + ')')}
                                             />
                                         </div>
@@ -363,7 +363,7 @@ export class InStockPage extends React.Component {
                                                                     const { formattedValue, value, floatValue } = values;
                                                                     this.setState({
                                                                         orderDetail: this.state.orderDetail.map(m => {
-                                                                            if (m.productId == p.productId) {
+                                                                            if (m.categoryId + m.productId == p.categoryId + p.productId) {
                                                                                 return {
                                                                                     ...p,
                                                                                     quantity: floatValue,
@@ -385,7 +385,7 @@ export class InStockPage extends React.Component {
                                                                     const { formattedValue, value, floatValue } = values;
                                                                     this.setState({
                                                                         orderDetail: this.state.orderDetail.map(m => {
-                                                                            if (m.productId == p.productId) {
+                                                                            if (m.categoryId + m.productId == p.categoryId + p.productId) {
                                                                                 return {
                                                                                     ...p,
                                                                                     unitPrice: floatValue,
