@@ -179,12 +179,16 @@ export class ListPage extends React.Component {
             <div className="box">
                 <nav className="level">
                     <div className="level-left">
-                        <div className="level-item">
-                            <Link className="button is-link is-rounded is-hovered" to="/orders/in">สั่งซื้อ</Link>
-                        </div>
-                        <div className="level-item">
-                            <Link className="button is-warning is-rounded is-hovered" to="/orders/out">จำหน่าย</Link>
-                        </div>
+                        {this.state.auth.role != 'ADMIN' &&
+                            <div className="level-item">
+                                <Link className="button is-link is-rounded is-hovered" to="/orders/in">สั่งซื้อ</Link>
+                            </div>
+                        }
+                        {this.state.auth.role != 'STOCK' &&
+                            <div className="level-item">
+                                <Link className="button is-warning is-rounded is-hovered" to="/orders/out">จำหน่าย</Link>
+                            </div>
+                        }
 
                     </div>
                     <div className="level-right">
