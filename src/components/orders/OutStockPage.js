@@ -420,7 +420,7 @@ export class OutStockPage extends React.Component {
                                                         totalPrice: 0
                                                     }
                                                 })}
-                                                getOptionValue={(option => option.productId)}
+                                                getOptionValue={(option => option.categoryId + option.productId)}
                                                 getOptionLabel={(option => option.productName + ' (' + option.productId + ')')}
                                             />
                                         </div>
@@ -459,7 +459,7 @@ export class OutStockPage extends React.Component {
                                                                     this.setState({
                                                                         orderDetail: this.state.orderDetail.map(m => {
                                                                             const quantity = floatValue > p.quantity1 ? p.quantity1 : floatValue;
-                                                                            if (m.productId == p.productId) {
+                                                                            if (m.categoryId + m.productId == p.categoryId + p.productId) {
                                                                                 return {
                                                                                     ...p,
                                                                                     quantity,

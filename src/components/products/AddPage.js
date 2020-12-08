@@ -55,15 +55,15 @@ export class AddPage extends React.Component {
     }
 
     onCategoryChange = (e) => {
-        // let category = this.state.categories.find(f => f.categoryId == e.target.value);
-        // const products = this.state.products
+        const categoryId = e.target.value;
+        const products = this.state.products.filter(f => f.categoryId == categoryId)
+        console.log(products)
         this.setState({
             product: {
                 ...this.state.product,
                 categoryId: e.target.value
             }
         })
-
     }
     fileChange = event => {
         const name = event.target.name;
@@ -73,7 +73,6 @@ export class AddPage extends React.Component {
                 file: file.length > 0 ? event.target.files[0] : null
             }
         })
-
 
         let reader = new FileReader();
 
