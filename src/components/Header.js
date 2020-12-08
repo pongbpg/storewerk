@@ -73,7 +73,7 @@ export class Header extends React.Component {
                 <div className="navbar-item has-dropdown is-hoverable">
                   <a className="navbar-link" onClick={e => this.onShowMenuClick('m1')}><span className="icon"><FaStore /></span>{this.state.auth.account.accountName}</a>
                   {this.state.showMenu.m1 && <div className="navbar-dropdown">
-                    <Link className="navbar-item is-tab" to="/orders"><span className="icon"><FaList /></span>ออเดอร์</Link>
+                    <Link className="navbar-item" to="/orders"><span className="icon"><FaList /></span>ออเดอร์</Link>
                     <Link className="navbar-item" to="/inventories"><span className="icon"><FaStore /></span>สินค้าคงเหลือ</Link>
                     <Link className="navbar-item" to="/reports"><span className="icon"><FaChartLine /></span>รายงาน</Link>
                   </div>}
