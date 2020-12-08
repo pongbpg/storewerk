@@ -22,6 +22,22 @@ exports.getByUser = (req, res) => {
             res.json(rows)
         })
 }
+
+exports.getYears = (req, res) => {
+    const sql = `call getYearsByAccId(?)`
+    req._sql.query(sql, [req.query.id])
+        .then(rows => {
+            res.json(rows)
+        })
+}
+
+exports.getMonths = (req, res) => {
+    const sql = `call getMonthsByAccId(?,?)`
+    req._sql.query(sql, [req.query.id, req.query.year])
+        .then(rows => {
+            res.json(rows)
+        })
+}
 exports.createAccount = (req, res) => {
     // console.log('before query', req.body.accountId)
     // const sql = `select * from accounts where accountId = ?`
