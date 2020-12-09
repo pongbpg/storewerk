@@ -38,7 +38,7 @@ export class OutStockPage extends React.Component {
                 vatPercent: 0,
                 vatPrice: 0,
                 netTotal: 0,
-                isStatus: 'SALE'
+                isStatus: 'PAID'
             },
             loading: '',
             loadingTel: '',

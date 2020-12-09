@@ -25,7 +25,7 @@ exports.getByAccountId = (req, res) => {
     from orders o
     left join users u on u.userId = ? and u.accountId = o.accountId
     where o.accountId=?  and (o.creator=? or u.roleId IN ('ADMIN','FINANCE'))
-    order by o.orderId desc`
+    order by o.orderDate desc`
     req._sql.query(sql, [req.query.userId, req.query.accountId, req.query.userId])
         .then(rows => {
             res.json(rows)

@@ -86,8 +86,8 @@ export class Header extends React.Component {
                       <Link className="navbar-item" to="/products"><span className="icon"><FaList /></span>สินค้า</Link>
                       <Link className="navbar-item" to="/warehouses"><span className="icon"><FaWarehouse /></span>คลัง</Link>
                       {/* <Link className="navbar-item" to="/branches"><span className="icon"><DiGitBranch /></span>สาขา</Link>
-                      <Link className="navbar-item" to="/members"><span className="icon"><TiContacts /></span>สมาชิก</Link>
-                      <Link className="navbar-item" to="/payments"><span className="icon"><MdPayment /></span>ชำระเงิน</Link> */}
+                      <Link className="navbar-item" to="/members"><span className="icon"><TiContacts /></span>สมาชิก</Link> */}
+                      <Link className="navbar-item" to="/payments"><span className="icon"><MdPayment /></span>ชำระเงิน</Link>
                       <Link className="navbar-item" to="/users"><span className="icon"><FaUserCog /></span>จัดการสิทธิ์</Link>
                     </div>}
                   </div>}

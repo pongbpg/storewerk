@@ -159,8 +159,8 @@ export class ListPage extends React.Component {
                     return (
                         <div className="field is-grouped-centered">
                             <div className="control">
-                                {/* {props.original.isStatus == 'SALE' && */}
-                                <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>
+                                {(['REQUESTED', 'PAID'].indexOf(props.original.isStatus) > -1 || this.state.auth.account.roleId == 'ADMIN') &&
+                                    <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>}
 
                                 <a className="button is-small"
                                     href={`http://rpt.storewerk.me/invoice?o=${btoa(props.original.orderId)}`} target="_blank">
@@ -179,12 +179,12 @@ export class ListPage extends React.Component {
             <div className="box">
                 <nav className="level">
                     <div className="level-left">
-                        {this.state.auth.role != 'SALE' &&
+                        {this.state.auth.account.roleId != 'SALE' &&
                             <div className="level-item">
                                 <Link className="button is-link is-rounded is-hovered" to="/orders/in">สั่งซื้อ</Link>
                             </div>
                         }
-                        {this.state.auth.role != 'STOCK' &&
+                        {this.state.auth.account.roleId != 'STOCK' &&
                             <div className="level-item">
                                 <Link className="button is-warning is-rounded is-hovered" to="/orders/out">จำหน่าย</Link>
                             </div>
