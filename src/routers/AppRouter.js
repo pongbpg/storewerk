@@ -150,7 +150,7 @@ class PaymentsRoute extends React.Component {
       <PublicRoute path={path + '/add'}
         breadcrumbs={[{ link: path, name: 'การชำระเงิน' }, { link: '/add', name: 'เพิ่ม' }]}
         component={PaymentsAdd} exact={true} />
-      <PublicRoute path={path + '/edit/:code'}
+      <PublicRoute path={path + '/edit/:bank/:code'}
         breadcrumbs={[{ link: path, name: 'การชำระเงิน' }, { link: '/edit', name: 'แก้ไข' }]}
         component={PaymentsEdit} exact={true} />
     </div>

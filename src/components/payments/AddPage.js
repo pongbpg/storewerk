@@ -4,15 +4,17 @@ import { startAddPayment } from '../../actions/payments';
 import { Link } from 'react-router-dom';
 import { history } from '../../routers/AppRouter';
 import _ from 'underscore';
+import { bankData } from '../../../data/banks';
 export class AddPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             auth: props.auth,
-            payment: { paymentId: '', paymentName: '' },
+            payment: { bankId: '', bankBranch: '', paymentId: '', paymentName: '', payStatus: 'OPEN' },
             payments: props.payments || [],
             errors: '',
-            loading: ''
+            loading: '',
+            banks: bankData,
         }
         if (props.auth.account.accountId == '') {
             alert('คุณยังไม่ได้เลือกบัญชี!!')
@@ -46,13 +48,14 @@ export class AddPage extends React.Component {
         let valid = true;
         // console.log(this.state.payments.length)
         // if (this.state.payments.length > 0) {
-        if (this.state.payments.find(f => f.paymentId == this.state.payment.paymentId)) {
+        if (this.state.payments.find(f => f.bankId == this.state.payment.bankId && f.paymentId == this.state.payment.paymentId)) {
             valid = false;
             this.setState({
                 loading: '',
-                error: 'รหัสนี้มีการใช้แล้ว'
+                error: 'ธนาคารและเลขบัญชีนี้มีการใช้แล้ว'
             })
         } else {
+            // console.log(this.state.payment)
             this.props.startAddPayment({
                 ...this.state.payment,
                 accountId: this.state.auth.account.accountId,
@@ -74,6 +77,7 @@ export class AddPage extends React.Component {
     }
 
     render() {
+        // console.log(this.state.banks)
         const disabled = this.state.payment.paymentId.length < 1 ||
             this.state.payment.paymentName.length < 1
         // console.log('disabled', disabled)
@@ -81,7 +85,28 @@ export class AddPage extends React.Component {
             <div className="box container">
                 <form onSubmit={this.onSubmit}>
                     <div className="field" style={{ paddingTop: '10px' }}>
-                        <label className="label">รหัสคลัง</label>
+                        <label className="label">ธนาคาร</label>
+                        <div className="control">
+                            <div className="select">
+                                <select name="bankId" onChange={this.onInputChange} required value={this.state.payment.bankId}>
+                                    {this.state.banks.map(b => (<option key={b.id} value={b.id}>{b.name}</option>))}
+                                </select>
+                            </div>
+                        </div>
+                        <p className="help is-danger">{this.state.error}</p>
+                    </div>
+                    <div className="field" style={{ paddingTop: '10px' }}>
+                        <label className="label">สาขา</label>
+                        <div className="control">
+                            <input className="input" type="text" name="bankBranch"
+                                disabled={this.state.loading != ''}
+                                value={this.state.payment.bankBranch} onChange={this.onInputChange} />
+
+                        </div>
+                        <p className="help is-danger">{this.state.error}</p>
+                    </div>
+                    <div className="field" style={{ paddingTop: '10px' }}>
+                        <label className="label">เลขที่บัญชี*</label>
                         <div className="control">
                             <input className="input" type="text" name="paymentId"
                                 disabled={this.state.loading != ''}
@@ -91,11 +116,23 @@ export class AddPage extends React.Component {
                         <p className="help is-danger">{this.state.error}</p>
                     </div>
                     <div className="field" style={{ paddingTop: '20px' }}>
-                        <label className="label">ชื่อคลัง</label>
+                        <label className="label">ชื่อบัญชี*</label>
                         <div className="control">
                             <input className="input" type="text" name="paymentName"
                                 disabled={this.state.loading != ''}
                                 value={this.state.payment.paymentName} onChange={this.onInputChange} required />
+                        </div>
+                    </div>
+                    <div className="field" style={{ paddingTop: '20px' }}>
+                        <label className="label">สถานะ</label>
+                        <div className="control">
+                            <div className="select">
+                                <select className="input" name="payStatus" onChange={this.onInputChange}
+                                    value={this.state.payment.payStatus}>
+                                    <option value="OPEN">เปิดใช้งาน</option>
+                                    <option value="CLOSE">ปิดใช้งาน</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div className="field is-grouped" style={{ paddingTop: '30px' }}>

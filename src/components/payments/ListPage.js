@@ -5,6 +5,7 @@ import { history } from '../../routers/AppRouter';
 import Selectors from '../../selectors/payments';
 import { startGetPayments } from '../../actions/payments'
 import { FaSearch } from 'react-icons/fa';
+import { bankData } from '../../../data/banks';
 import ReactTable from 'react-table-v6'
 import 'react-table-v6/react-table.css'
 import moment from 'moment';
@@ -18,7 +19,8 @@ export class ListPage extends React.Component {
             payments: props.payments || [],
             isModal: false,
             payment: {},
-            loading: ''
+            loading: '',
+            banks: bankData
         }
         this.props.startGetPayments(props.auth.account.accountId)
         if (props.auth.account.accountId == '') {
@@ -35,7 +37,7 @@ export class ListPage extends React.Component {
         }
     }
     onRemoveClick = (code, e) => {
-        this.setState({ isModal: true, payment: this.state.payments.find(f => f.paymentId == paymentId) })
+        this.setState({ isModal: true, payment: this.state.payments.find(f => f.bankId == bankId && f.paymentId == paymentId) })
     }
     // onConfirmRemove = (e) => {
     //     this.setState({ loading: 'is-loading' })
@@ -53,23 +55,37 @@ export class ListPage extends React.Component {
                 maxWidth: 60
             },
             {
-                Header: 'รหัสการชำระเงิน',
+                Header: 'ธนาคาร',
                 headerClassName: 'has-text-centered',
                 className: 'has-text-centered',
-                accessor: 'paymentId',
-                maxWidth: 100
+                accessor: 'bankId',
+                Cell: (props) => {
+                    return this.state.banks.find(f => f.id == props.value).name
+                }
             },
             {
-                Header: 'ชื่อการชำระเงิน',
+                Header: 'สาขา',
                 headerClassName: 'has-text-centered',
                 className: 'has-text-centered',
-                accessor: 'paymentName'
+                accessor: 'bankBranch'
             },
             {
                 Header: 'เลขที่',
                 headerClassName: 'has-text-centered',
                 className: 'has-text-centered',
-                accessor: 'paymentNo'
+                accessor: 'paymentId'
+            },
+            {
+                Header: 'ชื่อบัญชี',
+                headerClassName: 'has-text-centered',
+                className: 'has-text-centered',
+                accessor: 'paymentName'
+            },
+            {
+                Header: 'สถานะ',
+                headerClassName: 'has-text-centered',
+                className: 'has-text-centered',
+                accessor: 'payStatus'
             },
             {
                 Header: 'จัดการ',
@@ -78,7 +94,7 @@ export class ListPage extends React.Component {
                     return (
                         <div className="field is-grouped is-grouped-centered">
                             <div className="control">
-                                <Link className="button is-small" to={`/payments/edit/${props.original.paymentId}`}>แก้ไข</Link>
+                                <Link className="button is-small" to={`/payments/edit/${props.original.bankId}/${props.original.paymentId}`}>แก้ไข</Link>
                             </div>
                             {/* <div className="control">
                                 <button className="button is-small is-danger" onClick={(e) => this.onRemoveClick(props.original.paymentId, e)}>ลบ</button>

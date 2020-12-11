@@ -10,7 +10,7 @@ export const startAddPayment = (payment) => {
             .then(result => {
                 if (result.data.inserted) {
                     // console.log('action', payment)
-                    return getPaymentsById(payment.paymentId, payment.accountId)
+                    return getPaymentsById(payment.paymentId, payment.bankId, payment.accountId)
                         .then(newData => {
                             dispatch(addPayments(newData.data))
                             return {
@@ -60,14 +60,14 @@ export const startUpdatePayment = (payment) => {
 }
 
 export const setPayments = (payments) => ({
-    type: 'SET_WAREHOUSES',
+    type: 'SET_PAYMENTS',
     payments
 });
 export const updatePayments = (payment) => ({
-    type: 'UPDATE_WAREHOUSES',
+    type: 'UPDATE_PAYMENTS',
     payment
 });
 export const addPayments = (payment) => ({
-    type: 'ADD_WAREHOUSES',
+    type: 'ADD_PAYMENTS',
     payment
 });

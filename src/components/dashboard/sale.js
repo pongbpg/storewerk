@@ -1,5 +1,6 @@
 import CanvasJSReact from '../../libs/canvasjs.react';
 import React from 'react';
+import moment from 'moment'
 //var CanvasJSReact = require('./canvasjs.react');
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -16,8 +17,11 @@ export default class Sale extends React.Component {
                 prefix: "฿",
                 includeZero: false
             },
+            axisX: {
+                valueFormatString: "DD"
+            },
             data: [{
-                type: "line",
+                type: "area",
                 xValueFormatString: "DD/MM/YY",
                 yValueFormatString: "฿#,##0",
                 dataPoints: dataPoints

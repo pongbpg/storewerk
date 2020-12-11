@@ -7,11 +7,12 @@ export const getPaymentsByAccountId = (accountId) => {
         }
     })
 }
-export const getPaymentsById = (paymentId, accountId) => {
+export const getPaymentsById = (paymentId,bankId, accountId) => {
     // console.log('api', paymentId, accountId)
     return axios.get('/api/payments', {
         params: {
             paymentId,
+            bankId,
             accountId
         }
     })

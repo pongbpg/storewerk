@@ -1,10 +1,10 @@
 const _ = require('underscore');
 exports.getById = (req, res) => {
     const sql = `select *
-    from payments where paymentId=? and accountId=?
+    from payments where paymentId=? and bankId=? and accountId=?
     order by paymentId
     `
-    req._sql.query(sql, [req.query.paymentId, req.query.accountId])
+    req._sql.query(sql, [req.query.paymentId, req.query.bankId, req.query.accountId])
         .then(rows => {
             console.log(rows)
             res.json(rows)
@@ -14,7 +14,7 @@ exports.getByAccountId = (req, res) => {
     const sql = `select *
     from payments 
     where accountId=?  
-    order by paymentId`
+    order by bankId,paymentId`
     req._sql.query(sql, [req.query.accountId])
         .then(rows => {
             res.json(rows)
@@ -49,17 +49,18 @@ exports.create = (req, res) => {
     // })
 }
 exports.update = (req, res) => {
-    const keys = Object.keys(_.omit(req.body, 'paymentId', 'accountId'));
+    const keys = Object.keys(_.omit(req.body, 'paymentId', 'bankId', 'accountId'));
     let val = [];
     const sql = `update payments
     set ${keys.map(k => {
         val.push(req.body[k])
         return k + '=?'
     })}
-    where accountId = ? and  paymentId=?
+    where accountId = ? and  paymentId=? and bankId=?
     `;
     val.push(req.body.accountId)
     val.push(req.body.paymentId)
+    val.push(req.body.bankId)
     req._sql.query(sql, val)
         .then(row => {
             res.json({

@@ -5,7 +5,7 @@ export default (state = [], action) => {
         case 'ADD_PAYMENTS':
             return state.concat(action.payment)
         case 'UPDATE_PAYMENTS':
-            return state.map(m => m.paymentId == action.payment.paymentId ? { ...m, ...action.payment } : m)
+            return state.map(m => (m.bankId == action.payment.bankId && m.paymentId == action.payment.paymentId) ? { ...m, ...action.payment } : m)
         default:
             return state;
     }
