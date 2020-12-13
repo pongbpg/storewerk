@@ -15,7 +15,7 @@ export class EditPage extends React.Component {
         this.state = {
             auth: props.auth,
             product: product ||
-                { categoryId: '', categoryName: '', productId: '', productName: '', unitName: '', productPrice: 0, productCost: 0, productImg: null },
+                { categoryId: 'NULL', categoryName: '', productId: '', productName: '', unitName: '', productPrice: 0, productCost: 0, productImg: null },
             productImg: {
                 file: null,
                 preview: product ? product.productImg : null

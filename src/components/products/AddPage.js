@@ -13,7 +13,7 @@ export class AddPage extends React.Component {
         super(props);
         this.state = {
             auth: props.auth,
-            product: { categoryId: '', productId: '', productName: '', unitName: '', productPrice: 0, productCost: 0, productImg: null },
+            product: { categoryId: 'NULL', productId: '', productName: '', unitName: '', productPrice: 0, productCost: 0, productImg: null },
             productImg: {
                 file: null,
                 preview: null

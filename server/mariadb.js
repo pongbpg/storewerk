@@ -8,7 +8,7 @@ const pool = mariadb.createPool({
     user: process.env.MARIADB_USERNAME,
     password: process.env.MARIADB_PASSWORD,
     connectionLimit: 5,
-    database: 'storewerk',
+    database: 'tsstore',
     charset: 'UTF8'
 });
 
