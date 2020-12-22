@@ -8,6 +8,7 @@ import { FaSearch } from 'react-icons/fa';
 import NumberFormat from 'react-number-format'
 import 'react-table-v6/react-table.css'
 import moment from 'moment';
+import Money from '../../selectors/money'
 moment.locale('th');
 export class ListPage extends React.Component {
     constructor(props) {
@@ -88,7 +89,6 @@ export class ListPage extends React.Component {
             {
                 Header: 'ชื่อ',
                 headerClassName: 'has-text-left',
-                maxWidth: 400,
                 Cell: (props, value) => {
                     if (props.original.orderTypeId == 'IN')
                         return props.original.supplierName
@@ -153,21 +153,33 @@ export class ListPage extends React.Component {
             {
                 Header: 'จัดการ',
                 headerClassName: 'has-text-centered',
-                maxWidth: 100,
                 Cell: props => {
                     // console.log(props.original.id, '=', this.state.auth.account, props.original.id == this.state.auth.account)
                     return (
-                        <div className="field is-grouped-centered">
-                            <div className="control">
-                                {(['REQUESTED', 'PAID'].indexOf(props.original.isStatus) > -1 || this.state.auth.account.roleId == 'ADMIN') &&
-                                    <button className="button is-danger is-small" onClick={(e) => this.onDeleteClick(props.original.orderId, e)}>ลบ</button>}
+                        <div className="field is-grouped">
 
-                                <a className="button is-small"
-                                    href={`http://rpt.storewerk.me/invoice?o=${btoa(props.original.orderId)}`} target="_blank">
-                                    ใบกำกับภาษี
-                                </a>
-                                {/* <Link className="button is-small" to={`/orders/out/edit/${props.original.orderId}`}>แก้ไข</Link> */}
-                            </div>
+                            {props.original.isStatus != 'REQUESTED' &&
+                                <div className="control">
+                                    <a className="button"
+                                        href={`http://rpt.storewerk.me/invoice?o=${btoa(props.original.orderId)}`} target="_blank">
+                                        ใบกำกับภาษี
+                             </a>
+                                </div>}
+                            {(props.original.isStatus == 'REQUESTED' && ['ADMIN', 'FINANCE'].indexOf(this.state.auth.account.roleId) > -1) &&
+                                <div className="control">
+                                    <button className="button is-primary">
+                                        ชำระเงิน
+                                    </button> </div>}
+                            {/* <Link className="button is-small" to={`/orders/out/edit/${props.original.orderId}`}>แก้ไข</Link> */}
+                            {(['REQUESTED', 'PAID'].indexOf(props.original.isStatus) > -1 || this.state.auth.account.roleId == 'ADMIN') &&
+                                <div className="control">
+                                    <button className="button is-danger" onClick={(e) => {
+                                        if (confirm('ต้องการลบรายการนี้?'
+                                            + '\n' + moment(props.original.orderDate).format('ll') + ' ' + props.original.customerName
+                                            + '\n' + 'จำนวนสินค้า ' + Money(props.original.quantity)
+                                            + '\n' + 'ยอดทั้งหมด ' + Money(props.original.netTotal)))
+                                            this.onDeleteClick(props.original.orderId, e)
+                                    }}>ลบ</button> </div>}
                         </div >
                     )
                 }
@@ -201,8 +213,6 @@ export class ListPage extends React.Component {
                                     })
                                     const a = btoa('id=' + encodeURIComponent(orders));
                                     const b = atob(a);
-                                    console.log(a)
-                                    console.log(b)
                                     window.open('/print/request?' + a, 'Data', 'height=600,width=800');
                                 }}>Print ({countSelected})</button>
                             </div>
@@ -225,7 +235,7 @@ export class ListPage extends React.Component {
                     data={this.state.orders}
                     columns={columns}
                     resolveData={data => data.map(row => row)}
-                    defaultPageSize={30}
+                    defaultPageSize={50}
                     getTrProps={(state, rowInfo, column) => {
                         return {
                             onClick: (e) => {
