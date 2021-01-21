@@ -54,6 +54,9 @@ export class ListPage extends React.Component {
             selected: newSelected
         });
     }
+    onPaymentClick = (orderId) => {
+        console.log(orderId)
+    }
 
     render() {
 
@@ -167,9 +170,10 @@ export class ListPage extends React.Component {
                                 </div>}
                             {(props.original.isStatus == 'REQUESTED' && ['ADMIN', 'FINANCE'].indexOf(this.state.auth.account.roleId) > -1) &&
                                 <div className="control">
-                                    <button className="button is-primary">
+                                    <button className="button is-primary" onClick={e => this.onPaymentClick(props.original.orderId)}>
                                         ชำระเงิน
-                                    </button> </div>}
+                                    </button>
+                                </div>}
                             {/* <Link className="button is-small" to={`/orders/out/edit/${props.original.orderId}`}>แก้ไข</Link> */}
                             {(['REQUESTED', 'PAID'].indexOf(props.original.isStatus) > -1 || this.state.auth.account.roleId == 'ADMIN') &&
                                 <div className="control">
@@ -239,7 +243,7 @@ export class ListPage extends React.Component {
                     getTrProps={(state, rowInfo, column) => {
                         return {
                             onClick: (e) => {
-                                this.onRowSelect(rowInfo.original.orderId)
+                                // this.onRowSelect(rowInfo.original.orderId)
                             }
                             // this.props.history.push("/order/" + rowInfo.original.orderTypeId.toLowerCase() + "/stock/" + rowInfo.original.orderId)
                         }

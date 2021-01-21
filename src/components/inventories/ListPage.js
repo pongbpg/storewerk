@@ -4,9 +4,11 @@ import { startGetInventories } from '../../actions/inventories'
 import ReactTable from 'react-table-v6'
 import NumberFormat from 'react-number-format'
 import DatePicker from 'react-datepicker';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import 'react-table-v6/react-table.css'
 import _ from 'underscore';
 import moment from 'moment';
+import Modal from 'react-modal';
 moment.locale('th');
 export class ListPage extends React.Component {
     constructor(props) {
@@ -18,6 +20,9 @@ export class ListPage extends React.Component {
             inventories: props.inventories,
             warehouses: [],
             categories: [],
+            openModal: false,
+            selected: { categoryId: null, productId: null },
+            dateRange: [new Date(), new Date()]
         }
         if (props.auth.account.accountId == '') {
             alert('คุณยังไม่ได้เลือกบัญชี!!')
@@ -50,7 +55,16 @@ export class ListPage extends React.Component {
             });
         }
     }
-
+    onOpenModal = (categoryId, productId) => {
+        this.setState({ selected: { categoryId, productId }, openModal: true })
+        document.execCommand("copy");
+    }
+    onDateRangeChange = (e) => {
+        const dates = e ? [e[0], e[1]] : [new Date(), new Date()]
+        this.setState({
+            dateRange: dates
+        })
+    }
     render() {
 
         const columns = [
@@ -151,6 +165,18 @@ export class ListPage extends React.Component {
                         />
                     )
                 }
+            },
+            {
+                Header: 'รายงาน',
+                headerClassName: 'has-text-right',
+                className: 'has-text-right',
+                accessor: 'productId',
+                filterable: false,
+                Cell: props => {
+                    return (
+                        <button className="button" onClick={() => this.onOpenModal(props.original.categoryId, props.value)}>บัญชี</button>
+                    )
+                }
             }
         ]
         // console.log('wh', this.state.warehouses)
@@ -181,6 +207,22 @@ export class ListPage extends React.Component {
                     resolveData={data => data.map(row => row)}
                     defaultPageSize={20}
                 />
+                <div className={`modal ${this.state.openModal && 'is-active'}`}>
+                    <div className="modal-background"></div>
+                    <div className="modal-card">
+                        <header className="modal-card-head">
+                            <p className="modal-card-title">รายการบัญชีสินค้า</p>
+                            <button className="delete" aria-label="close" onClick={() => this.setState({ openModal: false })}></button>
+                        </header>
+                        <section className="modal-card-body has-text-centered" style={{height:'300px'}}>
+                            <DateRangePicker onChange={this.onDateRangeChange} value={this.state.dateRange} />
+                        </section>
+                        <footer className="modal-card-foot">
+                            <button className="button is-success">Save changes</button>
+                            <button className="button" onClick={() => this.setState({ openModal: false })}>Cancel</button>
+                        </footer>
+                    </div>
+                </div>
             </div>
         );
     }

@@ -7,3 +7,17 @@ export const printRequest = (accountId, orderId) => {
         }
     })
 }
+export const printProductUsed = (accountId, warehouseId, startDate, endDate) => {
+    return axios.post('/api/prints/product/used', { a: accountId, w: warehouseId, sd: startDate, ed: endDate }, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+}
+export const printProductInit = (accountId, warehouseId, date) => {
+    return axios.post('/api/prints/product/init', { a: accountId, w: warehouseId, d: date }, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+}

@@ -15,6 +15,7 @@ import { OrderList, OrderInStock, OrderOutStock } from './pages/Orders';
 import { UserList, UserAdd } from './pages/Users';
 import { PrintRequest } from './pages/Prints';
 import InventoriesList from '../components/inventories/ListPage';
+import PrintProduct from '../components/prints/product'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 export const history = createBrowserHistory();
@@ -36,6 +37,7 @@ const AppRouter = () => (
         <Route path="/users" component={UsersRoute} />
         <Route path='/print' component={PrintsRoute} />
         <PublicRoute path="/reports" component={ReportPage} breadcrumbs={[{ link: '', name: 'รายงาน' }]} exact={true} />
+        <PublicRoute path="/report/product" component={PrintProduct} breadcrumbs={[{ link: '', name: 'รายการเดินบัญชีสินค้า' }]} exact={true} />
         <PublicRoute path="/inventories" component={InventoriesList}
           breadcrumbs={[{ link: "/inventories", name: 'สินค้าคงเหลือ' }, { link: '', name: 'รายการ' }]}
           exact={true} />

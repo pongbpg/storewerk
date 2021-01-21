@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import { history } from '../routers/AppRouter';
 import { connect } from 'react-redux';
 import _ from 'underscore';
@@ -52,6 +53,8 @@ export class ReportPage extends React.Component {
       })
   }
   render() {
+    const dateStart = moment(this.state.dateRange[0]).format('YYYY-MM-DD');
+    const dateEnd = moment(this.state.dateRange[1]).format('YYYY-MM-DD');
     return (
       <div className="hero">
         <div className="hero-body">
@@ -71,6 +74,14 @@ export class ReportPage extends React.Component {
                   <td>ใบกำกับภาษี</td>
                   <td>
                     <button className="button is-danger is-small" name="rpt01" onClick={e => this.onRptClick('/invoice/out/:accountId', ['accountLicense'], 'POST', e)}>PDF</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>รายการสินค้า</td>
+                  <td>
+                    <a href={`/report/product?dateStart=${dateStart}&dateEnd=${dateEnd}`} target="_blank">รายละเอียด</a>
+                    {/* <button className="button is-danger is-small" name="rpt01" onClick={e => this.onRptClick('/invoice/out/:accountId', ['accountLicense'], 'POST', e)}>PDF</button> */}
                   </td>
                 </tr>
               </tbody>

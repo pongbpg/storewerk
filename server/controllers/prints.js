@@ -17,3 +17,31 @@ exports.request = (req, res) => {
             res.json(rows)
         })
 }
+exports.productUsed = (req, res) => {
+    const sql = `SELECT o.orderDate,CONCAT(od.categoryId,'#',od.productId) as productId ,od.productName
+    ,sum(if(od.quantity >=0,od.quantity,0)) as debit
+    ,sum(if(od.quantity <0,ABS(od.quantity),0)) as credit
+    FROM tsstore.orders o
+    INNER JOIN tsstore.orders_detail od on o.orderId =od.orderId 
+    WHERE o.accountId = ? AND o.warehouseId=? AND o.orderDate >= ? AND o.orderDate <= ?
+    AND o.isStatus not in ('REQUESTED','PURCHASED')
+    group by o.orderDate,CONCAT(od.categoryId,'#',od.productId),od.productName`
+    req._sql.query(sql, [req.body.a, req.body.w, req.body.sd, req.body.ed])
+        .then(rows => {
+            // console.log(rows)
+            res.json(rows)
+        })
+}
+exports.productInit = (req, res) => {
+    const sql = `SELECT CONCAT(od.categoryId,'#',od.productId) as productId,sum(od.quantity) as init
+    FROM tsstore.orders o
+    INNER JOIN tsstore.orders_detail od on o.orderId =od.orderId 
+    WHERE o.accountId = ? AND o.warehouseId=? AND o.orderDate < ?
+    AND o.isStatus not in ('REQUESTED','PURCHASED')
+    group by CONCAT(od.categoryId,'#',od.productId) `
+    req._sql.query(sql, [req.body.a, req.body.w, req.body.d])
+        .then(rows => {
+            // console.log(rows)
+            res.json(rows)
+        })
+}
