@@ -219,26 +219,28 @@ export class ListPage extends React.Component {
                         </div>
                     </div>
                     <div className="level-right">
-                        <div className="field is-grouped">
-                            <div className="control">
-                                <input type="checkbox" onClick={e => this.setState({ showCost: e.target.checked })} />
-                                <label>ต้นทุน</label>
+                        {['ADMIN', 'FINANCE'].indexOf(this.state.auth.account.roleId) > -1 &&
+                            <div className="field is-grouped">
+                                <div className="control">
+                                    <input type="checkbox" onClick={e => this.setState({ showCost: e.target.checked })} />
+                                    <label>ต้นทุน</label>
+                                </div>
+                                <div className="control">
+                                    <Workbook filename={'สินค้าคงคลัง' + this.state.auth.account.accountId + '_' + this.state.orderDate + '.xlsx'}
+                                        element={<button className="button is-primary"><FaPrint />&nbsp;Excel</button>}>
+                                        <Workbook.Sheet data={this.state.inventories} name={'สินค้าคงคลัง'}>
+                                            <Workbook.Column label="คลัง" value="warehouseName" />
+                                            <Workbook.Column label="ประเภท" value="categoryName" />
+                                            <Workbook.Column label="สินค้า" value="productName" />
+                                            <Workbook.Column label="หน่วยนับ" value="unitName" />
+                                            <Workbook.Column label="ต้นทุน" value="productCost" />
+                                            <Workbook.Column label="ราคา" value="productPrice" />
+                                            <Workbook.Column label="คงเหลือ" value="quantity1" />
+                                        </Workbook.Sheet>
+                                    </Workbook>
+                                </div>
                             </div>
-                            <div className="control">
-                                <Workbook filename={'สินค้าคงคลัง'+this.state.auth.account.accountId + '_' + this.state.orderDate + '.xlsx'}
-                                    element={<button className="button is-primary"><FaPrint />&nbsp;Excel</button>}>
-                                    <Workbook.Sheet data={this.state.inventories} name={'สินค้าคงคลัง'}>
-                                        <Workbook.Column label="คลัง" value="warehouseName" />
-                                        <Workbook.Column label="ประเภท" value="categoryName" />
-                                        <Workbook.Column label="สินค้า" value="productName" />
-                                        <Workbook.Column label="หน่วยนับ" value="unitName" />
-                                        <Workbook.Column label="ต้นทุน" value="productCost" />
-                                        <Workbook.Column label="ราคา" value="productPrice" />
-                                        <Workbook.Column label="คงเหลือ" value="quantity1" />
-                                    </Workbook.Sheet>
-                                </Workbook>
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
 
