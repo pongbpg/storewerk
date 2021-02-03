@@ -9,6 +9,8 @@ import 'react-table-v6/react-table.css'
 import _ from 'underscore';
 import moment from 'moment';
 import Modal from 'react-modal';
+import Workbook from 'react-excel-workbook'
+import { FaPrint } from 'react-icons/fa'
 moment.locale('th');
 export class ListPage extends React.Component {
     constructor(props) {
@@ -22,7 +24,8 @@ export class ListPage extends React.Component {
             categories: [],
             openModal: false,
             selected: { categoryId: null, productId: null },
-            dateRange: [new Date(), new Date()]
+            dateRange: [new Date(), new Date()],
+            showCost: false
         }
         if (props.auth.account.accountId == '') {
             alert('คุณยังไม่ได้เลือกบัญชี!!')
@@ -67,7 +70,7 @@ export class ListPage extends React.Component {
     }
     render() {
 
-        const columns = [
+        let columns = [
             {
                 Header: '#',
                 Cell: props => props.index + 1,
@@ -180,21 +183,62 @@ export class ListPage extends React.Component {
             }
         ]
         // console.log('wh', this.state.warehouses)
-
+        const colCost = {
+            Header: 'ต้นทุน',
+            headerClassName: 'has-text-right',
+            className: 'has-text-right',
+            accessor: 'productCost',
+            filterable: false,
+            Cell: props => {
+                return (
+                    <NumberFormat
+                        displayType="text"
+                        thousandSeparator={true}
+                        decimalScale={2}
+                        value={props.value}
+                    />
+                )
+            }
+        }
+        if (this.state.showCost) columns.splice(5, 0, colCost)
         return (
             <div className="box" >
-                <div className="field">
-                    <label className="label">วันที่</label>
-                    <div className="control">
-                        <DatePicker
-                            className="input has-text-centered"
-                            dateFormat="DD/MM/YYYY"
-                            placeholderText="เลือกวันที่"
-                            selected={this.state.orderDate}
-                            onChange={(orderDate) => this.setState({
-                                orderDate
-                            }, () => this.props.startGetInventories(this.state.auth.account.accountId, moment(orderDate).format('YYYY-MM-DD')))}
-                        />
+                <div className="level">
+                    <div className="level-left">
+                        <label className="label">วันที่</label>
+                        <div className="control">
+                            <DatePicker
+                                className="input has-text-centered"
+                                dateFormat="DD/MM/YYYY"
+                                placeholderText="เลือกวันที่"
+                                selected={this.state.orderDate}
+                                onChange={(orderDate) => this.setState({
+                                    orderDate
+                                }, () => this.props.startGetInventories(this.state.auth.account.accountId, moment(orderDate).format('YYYY-MM-DD')))}
+                            />
+                        </div>
+                    </div>
+                    <div className="level-right">
+                        <div className="field is-grouped">
+                            <div className="control">
+                                <input type="checkbox" onClick={e => this.setState({ showCost: e.target.checked })} />
+                                <label>ต้นทุน</label>
+                            </div>
+                            <div className="control">
+                                <Workbook filename={'สินค้าคงคลัง'+this.state.auth.account.accountId + '_' + this.state.orderDate + '.xlsx'}
+                                    element={<button className="button is-primary"><FaPrint />&nbsp;Excel</button>}>
+                                    <Workbook.Sheet data={this.state.inventories} name={'สินค้าคงคลัง'}>
+                                        <Workbook.Column label="คลัง" value="warehouseName" />
+                                        <Workbook.Column label="ประเภท" value="categoryName" />
+                                        <Workbook.Column label="สินค้า" value="productName" />
+                                        <Workbook.Column label="หน่วยนับ" value="unitName" />
+                                        <Workbook.Column label="ต้นทุน" value="productCost" />
+                                        <Workbook.Column label="ราคา" value="productPrice" />
+                                        <Workbook.Column label="คงเหลือ" value="quantity1" />
+                                    </Workbook.Sheet>
+                                </Workbook>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -214,7 +258,7 @@ export class ListPage extends React.Component {
                             <p className="modal-card-title">รายการบัญชีสินค้า</p>
                             <button className="delete" aria-label="close" onClick={() => this.setState({ openModal: false })}></button>
                         </header>
-                        <section className="modal-card-body has-text-centered" style={{height:'300px'}}>
+                        <section className="modal-card-body has-text-centered" style={{ height: '300px' }}>
                             <DateRangePicker onChange={this.onDateRangeChange} value={this.state.dateRange} />
                         </section>
                         <footer className="modal-card-foot">
