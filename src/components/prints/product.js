@@ -9,6 +9,7 @@ import querySting from 'query-string'
 import moment from 'moment';
 import Money from '../../selectors/money'
 import { FaPrint } from 'react-icons/fa'
+import Workbook from 'react-excel-workbook'
 moment.locale('th');
 export class ProductPage extends React.Component {
     constructor(props) {
@@ -65,7 +66,7 @@ export class ProductPage extends React.Component {
                             this.setState({ data: res2.data })
                             printProductInit(this.state.auth.account.accountId, warehouseSelect, this.state.params.dateStart)
                                 .then(res3 => {
-                                    this.setState({ init: res3.data })
+                                    this.setState({ init: res3.data, productSelect: res3.data[0].productId })
                                 })
                                 .catch(err3 => {
                                     console.log(err3)
@@ -85,59 +86,78 @@ export class ProductPage extends React.Component {
                 console.log(err)
             })
     }
-    onProductChange = (e) => {
-        const productSelect = e.target.value;
 
-        this.setState({ productSelect, initStock: this.state.init.find(f => f.productId == productSelect).init })
-    }
     render() {
-        let balance = this.state.initStock;
+        let balance = this.state.init.find(f => f.productId == this.state.productSelect);
+        balance = balance ? balance.init : 0;
         let debit = 0, credit = 0;
-        const product = this.state.products.find(f => f.categoryId + '#' + f.productId == this.state.productSelect)
+        const workbooks = _.chain(this.state.data).groupBy("productId").map((offers, productId) => ({ productId })).value()
+            .map(group => {
+                const product = this.state.products.find(f => f.categoryId + '#' + f.productId == group.productId)
+                let balanceWs = this.state.init.find(f => f.productId == group.productId);
+                balanceWs = balanceWs ? balanceWs.init : 0;
+                return {
+                    ...group,
+                    productName: product.productName,
+                    balanceWs,
+                    dataset: this.state.data.filter(f => f.productId == group.productId)
+                        .map(d => {
+                            balanceWs = balanceWs + d.debit - d.credit;
+                            return { ...d, balanceWs, orderDate: moment(d.orderDate).format('ll') }
+                        })
+                }
+            })
+        console.log(workbooks)
         return (
             <div className="box" >
                 <div className="level">
                     <div className="level-left">
-
+                        <div className="field is-horizontal">
+                            <div className="field-body">
+                                <div className="field">
+                                    <label className="label">คลังสินค้า</label>
+                                    <div className="control">
+                                        <div className="select">
+                                            <select value={this.state.warehouseSelect} onChange={this.onWarehouseChange}>
+                                                <option value="" disabled>เลือก</option>
+                                                {this.state.warehouses.map(wh => <option key={wh.warehouseId} value={wh.warehouseId}>{wh.warehouseName}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="level-right">
-                        <button className="button" onClick={() => this.setState({ isPrint: true })}><FaPrint />&nbsp;Print</button>
+                        <button className="button is-dark" disabled={this.state.productSelect == ''} onClick={() => this.setState({ isPrint: true })}><FaPrint />&nbsp;Print</button>
+                        <Workbook filename={this.state.auth.account.accountId + this.state.warehouseSelect + this.state.params.dateStart + '_' + this.state.params.dateEnd + '.xlsx'}
+                            element={<button disabled={this.state.warehouseSelect == ''} className="button is-primary"><FaPrint />&nbsp;Excel</button>}>
+                            {/* <Workbook.Sheet data={data1} name="Sheet A">
+                                <Workbook.Column label="Foo" value="foo" />
+                                <Workbook.Column label="Bar" value="bar" />
+                            </Workbook.Sheet> */}
+                            {workbooks.map(ws => {
+                                return <Workbook.Sheet data={ws.dataset} name={ws.productName} key={ws.productId}>
+                                    <Workbook.Column label="วันที่" value="orderDate" />
+                                    <Workbook.Column label="รับ" value="debit" />
+                                    <Workbook.Column label="จ่าย" value="credit" />
+                                    <Workbook.Column label="คงเหลือ" value="balanceWs" />
+                                </Workbook.Sheet>
+                            })}
+                        </Workbook>
                     </div>
                 </div>
-                <div className="field is-horizontal">
-                    <div className="field-body">
-                        <div className="field">
-                            <label className="label">คลังสินค้า</label>
-                            <div className="control">
-                                <div className="select">
-                                    <select value={this.state.warehouseSelect} onChange={this.onWarehouseChange}>
-                                        <option value="" disabled>เลือก</option>
-                                        {this.state.warehouses.map(wh => <option key={wh.warehouseId} value={wh.warehouseId}>{wh.warehouseName}</option>)}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="field">
-                            <label className="label">สินค้า</label>
-                            <div className="control is-expanded">
-                                <div className="select">
-                                    <select value={this.state.productSelect} onChange={this.onProductChange}>
-                                        <option value="" disabled>เลือก</option>
-                                        {_.chain(this.state.data).groupBy("productId").map((offers, productId) => ({ productId })).value()
-                                            .map(pd => {
-                                                const p = this.state.products.find(f => f.categoryId + '#' + f.productId == pd.productId)
-                                                return <option key={pd.productId} value={pd.productId}>{p.productName}</option>
-                                            })}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        {this.state.productSelect != '' && < div className="field">
-                            <h3 className="title is-3">{product.productName}</h3>
-                        </div>}
-                    </div>
+                <div className="tabs">
+                    <ul>
+                        {_.chain(this.state.data).groupBy("productId").map((offers, productId) => ({ productId })).value()
+                            .map(pd => {
+                                const p = this.state.products.find(f => f.categoryId + '#' + f.productId == pd.productId)
+                                return <li key={pd.productId} className={this.state.productSelect == pd.productId ? 'is-active' : ''}>
+                                    <a onClick={() => this.setState({ productSelect: pd.productId })}>{p.productName}</a>
+                                </li>
+                            })}
+                    </ul>
                 </div>
-
                 <div className="row">
                     <table className="table is-bordered is-fullwidth">
                         <thead>

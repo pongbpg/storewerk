@@ -19,6 +19,11 @@ module.exports = (env) => {
     const isProduction = env === 'production';
     return {
         entry: ['babel-polyfill', './src/app.js'],
+        node: { fs: 'empty' },
+        externals: [
+            { './cptable': 'var cptable' },
+            { './jszip': 'jszip' }
+        ],
         output: {
             path: path.resolve(__dirname, 'public', 'dist'),
             filename: '[name].[hash].js',
@@ -26,6 +31,12 @@ module.exports = (env) => {
             publicPath: '/dist'
         },
         module: {
+            // loaders: [
+            //     {
+            //         test: /\.json$/,
+            //         loader: 'json-loader'
+            //     }
+            // ],
             rules: [
                 {
                     test: /\.json$/,
@@ -34,7 +45,7 @@ module.exports = (env) => {
                 {
                     loader: 'babel-loader',
                     test: /\.js$/,
-                    exclude: /node_modules/
+                    exclude: /node_modules/,
                 },
                 {
                     test: /\.css$/,
