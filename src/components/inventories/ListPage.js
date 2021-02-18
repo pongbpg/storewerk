@@ -25,7 +25,8 @@ export class ListPage extends React.Component {
             openModal: false,
             selected: { categoryId: null, productId: null },
             dateRange: [new Date(), new Date()],
-            showCost: false
+            showCost: false,
+            filtered: [],
         }
         if (props.auth.account.accountId == '') {
             alert('คุณยังไม่ได้เลือกบัญชี!!')
@@ -68,8 +69,28 @@ export class ListPage extends React.Component {
             dateRange: dates
         })
     }
-    render() {
+    onFilteredChangeCustom = (value, accessor) => {
+        let filtered = this.state.filtered;
+        let insertNewFilter = 1;
 
+        if (filtered.length) {
+            filtered.forEach((filter, i) => {
+                if (filter["id"] === accessor) {
+                    if (value === "" || !value.length) filtered.splice(i, 1);
+                    else filter["value"] = value;
+
+                    insertNewFilter = 0;
+                }
+            });
+        }
+
+        if (insertNewFilter) {
+            filtered.push({ id: accessor, value: value });
+        }
+        // console.log(filtered)
+        this.setState({ filtered: filtered });
+    };
+    render() {
         let columns = [
             {
                 Header: '#',
@@ -84,7 +105,8 @@ export class ListPage extends React.Component {
                 className: 'has-text-centered',
                 accessor: 'warehouseName',
                 filterMethod: (filter, row) => {
-                    if (filter.value === "all") {
+                    // console.log(filter,row)
+                    if (filter.value == "all") {
                         return true;
                     } else {
                         return row[filter.id] == filter.value;
@@ -92,7 +114,7 @@ export class ListPage extends React.Component {
                 },
                 Filter: ({ filter, onChange }) =>
                     <select className="control"
-                        onChange={event => onChange(event.target.value)}
+                        onChange={event => this.onFilteredChangeCustom(event.target.value, 'warehouseName')}
                         style={{ width: "100%" }}
                         value={filter ? filter.value : "all"}>
                         <option value="all">ทั้งหมด</option>
@@ -115,7 +137,8 @@ export class ListPage extends React.Component {
                 },
                 Filter: ({ filter, onChange }) =>
                     <select className="control"
-                        onChange={event => onChange(event.target.value)}
+                        // onChange={event => onChange(event.target.value)}
+                        onChange={event => this.onFilteredChangeCustom(event.target.value, 'categoryName')}
                         style={{ width: "100%" }}
                         value={filter ? filter.value : "all"}>
                         <option value="all">ทั้งหมด</option>
@@ -133,7 +156,11 @@ export class ListPage extends React.Component {
                 accessor: 'productName',
                 filterMethod: (filter, row) => {
                     return row[filter.id].toLowerCase().includes(filter.value.toLowerCase())
-                }
+                },
+                Filter: ({ filter, onChange }) =>
+                    <input type="text" className="control"
+                        onChange={event => this.onFilteredChangeCustom(event.target.value, 'productName')}
+                        value={filter ? filter.value : ''} />
             },
             {
                 Header: 'ราคาขาย',
@@ -228,7 +255,13 @@ export class ListPage extends React.Component {
                                 <div className="control">
                                     <Workbook filename={'สินค้าคงคลัง' + this.state.auth.account.accountId + '_' + this.state.orderDate + '.xlsx'}
                                         element={<button className="button is-primary"><FaPrint />&nbsp;Excel</button>}>
-                                        <Workbook.Sheet data={this.state.inventories} name={'สินค้าคงคลัง'}>
+                                        <Workbook.Sheet data={this.state.inventories.filter(f1 => {
+                                            const wh = this.state.filtered.find(f2 => f2.id == 'warehouseName');
+                                            if (wh)
+                                                return wh.value == 'all' ? true : f1.warehouseName == wh.value
+                                            else return true
+                                        })
+                                        } name={'สินค้าคงคลัง'}>
                                             <Workbook.Column label="คลัง" value="warehouseName" />
                                             <Workbook.Column label="ประเภท" value="categoryName" />
                                             <Workbook.Column label="สินค้า" value="productName" />
@@ -246,8 +279,21 @@ export class ListPage extends React.Component {
 
                 <ReactTable className="table -highlight"
                     filterable
-                    defaultFilterMethod={(filter, row) =>
-                        String(row[filter.id]) === filter.value}
+                    filtered={this.state.filtered}
+                    // defaultFilterMethod={(filter, row) =>
+                    //     String(row[filter.id]) === filter.value}
+                    defaultFilterMethod={(filter, row, column) => {
+                        const id = filter.pivotId || filter.id;
+                        if (typeof filter.value === "object") {
+                            return row[id] !== undefined
+                                ? filter.value.indexOf(row[id]) > -1
+                                : true;
+                        } else {
+                            return row[id] !== undefined
+                                ? String(row[id]).indexOf(filter.value) > -1
+                                : true;
+                        }
+                    }}
                     data={this.state.inventories}
                     columns={columns}
                     resolveData={data => data.map(row => row)}
