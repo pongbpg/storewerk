@@ -139,6 +139,7 @@ export class ProductPage extends React.Component {
                             {workbooks.map(ws => {
                                 return <Workbook.Sheet data={ws.dataset} name={ws.productName} key={ws.productId}>
                                     <Workbook.Column label="วันที่" value="orderDate" />
+                                    <Workbook.Column label="เลขที่" value="orderNo" />
                                     <Workbook.Column label="รับ" value="debit" />
                                     <Workbook.Column label="จ่าย" value="credit" />
                                     <Workbook.Column label="คงเหลือ" value="balanceWs" />
@@ -163,6 +164,7 @@ export class ProductPage extends React.Component {
                         <thead>
                             <tr>
                                 <th className="has-text-centered">วันที่</th>
+                                <th className="has-text-centered">เลขที่</th>
                                 <th className="has-text-centered">รับ</th>
                                 <th className="has-text-centered">จ่าย</th>
                                 <th className="has-text-centered">คงเหลือ</th>
@@ -179,13 +181,14 @@ export class ProductPage extends React.Component {
                                     credit += d.credit;
                                     return (<tr key={i}>
                                         <td className="has-text-centered">{moment(d.orderDate).format('ll')}</td>
+                                        <td className="has-text-centered">{d.orderNo}</td>
                                         <td className="has-text-right">{Money(d.debit, 2)}</td>
                                         <td className="has-text-right">{Money(d.credit, 2)}</td>
                                         <td className="has-text-right">{Money(balance, 2)}</td>
                                     </tr>)
                                 })}
                             <tr>
-                                <td className="has-text-centered has-text-weight-bold">รวม</td>
+                                <td className="has-text-centered has-text-weight-bold" colSpan="2">รวม</td>
                                 <td className="has-text-right has-text-weight-bold">{Money(debit, 2)}</td>
                                 <td className="has-text-right has-text-weight-bold">{Money(credit, 2)}</td>
                                 <td className="has-text-right has-text-weight-bold">{Money(balance, 2)}</td>
