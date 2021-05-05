@@ -164,7 +164,7 @@ export class ListPage extends React.Component {
                             {props.original.isStatus != 'REQUESTED' &&
                                 <div className="control">
                                     <a className="button"
-                                        href={`http://rpt.storewerk.me/invoice?o=${btoa(props.original.orderId)}`} target="_blank">
+                                        href={`http://yaumjai.com:3000/api/storewerk/invoice?o=${btoa(props.original.orderId)}`} target="_blank">
                                         ใบกำกับภาษี
                              </a>
                                 </div>}
